@@ -1,0 +1,21 @@
+{
+  "fusion": {
+    "fixed_threshold": 0.70,
+    "weights": {"face": 1.0, "fingerprint": 1.0, "voice": 1.0},
+    "bands": {
+      "low":      {"approve": 0.60, "reject": 0.30, "min_modalities": 1, "min_coverage": 0.30, "conflict_floor": 0.00},
+      "medium":   {"approve": 0.70, "reject": 0.35, "min_modalities": 2, "min_coverage": 0.50, "conflict_floor": 0.15},
+      "high":     {"approve": 0.80, "reject": 0.40, "min_modalities": 2, "min_coverage": 0.60, "conflict_floor": 0.25},
+      "critical": {"approve": 0.88, "reject": 0.45, "min_modalities": 3, "min_coverage": 0.70, "conflict_floor": 0.35}
+    }
+  },
+  "risk": {
+    "new_recipient_points": 20,
+    "international_points": 12,
+    "new_device_points": 10,
+    "history_points": 12,
+    "medium_from": 25,
+    "high_from": 50,
+    "critical_from": 75
+  }
+}
