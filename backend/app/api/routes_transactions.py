@@ -9,6 +9,7 @@ from ..models import Transaction, User
 from ..schemas import (AttemptOut, RiskPreviewIn, TransactionCreate, TransactionDetail, TransactionList,
                        TransactionOut)
 from ..security import current_user
+from ..services import abuse
 from ..services import authentication as auth
 from ..services.events import log_event
 from ..services.risk import RiskInput, assess_risk
@@ -60,7 +61,7 @@ def _out(txn: Transaction, show_scores: bool, detail: bool = False) -> dict:
         if not show_scores:
             results = _scrub_results(results)
         summary = [{"modality": r["modality"], "status": r["status"], "calibrated": r["calibrated"],
-                    "raw_score": r["raw_score"], "reason": r["reason"]} for r in results]
+                    "raw_score": r["raw_score"], "reason": r["reason"], "reason_code": r.get("reason_code")} for r in results]
     d["modality_summary"] = summary
     if detail:
         d["attempts"] = [_attempt_out(a, show_scores) for a in txn.attempts]
@@ -76,9 +77,10 @@ def _txn(db: Session, me: User, txn_id: int) -> Transaction:
 
 
 @router.post("/risk/assess")
-def preview_risk(body: RiskPreviewIn, request: Request, _: User = Depends(current_user)):
-    """Stateless risk preview (no user history, nothing stored)."""
-    return assess_risk(RiskInput(**body.model_dump()), request.app.state.risk_cfg).to_dict()
+def preview_risk(body: RiskPreviewIn, request: Request, me: User = Depends(current_user), db: Session = Depends(get_db)):
+    """Risk preview with this user's own history (velocity, usual hours, ...). Nothing is stored."""
+    cfg = request.app.state.risk_cfg
+    return assess_risk(auth.build_risk_input(db, me, body.model_dump(), cfg), cfg).to_dict()
 
 
 @router.post("/transactions", response_model=TransactionDetail, status_code=201)
@@ -86,6 +88,10 @@ def create_transaction(body: TransactionCreate, request: Request, me: User = Dep
                        db: Session = Depends(get_db)):
     if me.role == "admin":
         raise ApiError(403, "owner_only", "Administrators cannot create transactions for customers.")
+    from ..services import login as login_svc
+    missing = login_svc.missing_core(db, me.id) if request.app.state.settings.login_biometrics == "required" else []
+    if missing:
+        raise ApiError(409, "enroll_first", f"Enroll your {' and '.join(missing)} before making payments. Fingerprint is optional.")
     data = body.model_dump()
     data["user_id"] = me.id
     txn = auth.create_transaction(db, me, data, request.app.state.risk_cfg)
@@ -128,7 +134,8 @@ def get_transaction(txn_id: int, request: Request, me: User = Depends(current_us
 @router.post("/transactions/{txn_id}/authenticate", response_model=TransactionDetail)
 async def authenticate(txn_id: int, request: Request, me: User = Depends(current_user), db: Session = Depends(get_db),
                        face: UploadFile | None = File(None), fingerprint: UploadFile | None = File(None),
-                       voice: UploadFile | None = File(None)):
+                       voice: UploadFile | None = File(None), challenge_id: str | None = Form(None),
+                       face_frames: list[UploadFile] = File(default_factory=list)):
     s = request.app.state
     txn = _txn(db, me, txn_id)
     if txn.user_id != me.id:
@@ -138,7 +145,11 @@ async def authenticate(txn_id: int, request: Request, me: User = Depends(current
         "fingerprint": await read_upload(fingerprint, s.settings.max_image_bytes),
         "voice": await read_upload(voice, s.settings.max_audio_bytes),
     }
-    auth.authenticate(db, txn, samples, s.registry, s.templates, s.fusion_cfg, s.settings)
+    frames = [d for d in [await read_upload(f, s.settings.max_image_bytes) for f in face_frames] if d is not None]
+    live = auth.LiveInput(challenge=s.challenges.consume(challenge_id, me.id), challenge_sent=bool(challenge_id),
+                          face_frames=frames)
+    auth.authenticate(db, txn, samples, s.registry, s.templates, s.fusion_cfg, s.settings, abuse.client_ctx(request),
+                      live, s.liveness)
     db.refresh(txn)
     return _out(txn, _show_scores(request, me), detail=True)
 
@@ -153,13 +164,26 @@ async def verify_single(modality: str, request: Request, file: UploadFile = File
         raise ApiError(404, "unknown_modality", f"Unknown modality '{modality}'.")
     if me.role == "admin":
         raise ApiError(403, "owner_only", "Administrators have no biometric references.")
-    auth.check_biometric_lockout(db, me.id, s.settings)
+    ctx = abuse.client_ctx(request)
+    abuse.check_biometric_allowed(db, s.settings, me.id, ctx)
     data = await read_upload(file, s.settings.max_audio_bytes if modality == "voice" else s.settings.max_image_bytes)
     res = auth.run_modality(s.registry.get(modality), modality, s.templates.load(me.id, modality), data, db, me.id)
     log_event(db, "verification", me.id, modality=modality, status=res.status.value)
     if res.status.value == "no_match":
-        log_event(db, "biometric_failure", me.id, modality=modality, via="verify")
+        log_event(db, "biometric_failure", me.id, ctx=ctx, modality=modality, via="verify")
     out = res.to_dict()
     if not _show_scores(request, me):
         out.update(raw_score=None, calibrated=None, threshold=None, details={})
     return out
+
+
+
+@router.post("/liveness/challenge")
+def liveness_challenge(request: Request, me: User = Depends(current_user)):
+    """Issue a one-time challenge: a head-turn direction for the face and three words for the voice.
+    Use it in the next authenticate call; it expires quickly and works once."""
+    s = request.app.state
+    if me.role == "admin":
+        raise ApiError(403, "owner_only", "Administrators have no biometrics.")
+    from ..services.login import challenge_payload
+    return challenge_payload(s.challenges.issue(me.id), s.settings, s.liveness)

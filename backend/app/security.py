@@ -45,10 +45,10 @@ def _digest(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 
-def create_session(db: DbSession, user: User, hours: int) -> tuple[str, datetime]:
+def create_session(db: DbSession, user: User, hours: float, scope: str = "full") -> tuple[str, datetime]:
     token = secrets.token_urlsafe(32)
     exp = utcnow() + timedelta(hours=hours)
-    db.add(Session(token_hash=_digest(token), user_id=user.id, expires_at=exp))
+    db.add(Session(token_hash=_digest(token), user_id=user.id, expires_at=exp, scope=scope))
     db.commit()
     return token, exp
 
@@ -62,7 +62,7 @@ def _aware(dt: datetime) -> datetime:
     return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
 
 
-def current_user(request: Request, db: DbSession = Depends(get_db)) -> User:
+def _resolve(request: Request, db: DbSession, scopes: set[str]) -> User:
     header = request.headers.get("authorization", "")
     scheme, _, token = header.partition(" ")
     if scheme.lower() != "bearer" or not token:
@@ -70,11 +70,36 @@ def current_user(request: Request, db: DbSession = Depends(get_db)) -> User:
     sess = db.query(Session).filter_by(token_hash=_digest(token.strip())).one_or_none()
     if sess is None or sess.revoked or _aware(sess.expires_at) < utcnow():
         raise ApiError(401, "session_invalid", "Your session is missing or expired. Sign in again.")
+    if sess.scope not in scopes:
+        if sess.scope == "preauth":
+            raise ApiError(401, "biometric_login_required", "Finish signing in with your face and voice.")
+        raise ApiError(403, "enrollment_incomplete", "Enroll your face and voice first. Until then only the enrollment pages are available.")
     user = db.get(User, sess.user_id)
     if user is None:
         raise ApiError(401, "session_invalid", "Account no longer exists.")
-    request.state.token_hash = sess.token_hash
+    request.state.token_hash, request.state.session_id, request.state.session_scope = sess.token_hash, sess.id, sess.scope
     return user
+
+
+def current_user(request: Request, db: DbSession = Depends(get_db)) -> User:
+    """A fully signed-in user. Limited and half-finished sessions are refused."""
+    return _resolve(request, db, {"full"})
+
+
+def current_user_any(request: Request, db: DbSession = Depends(get_db)) -> User:
+    """Full or limited session (an account that still has to enroll face and voice)."""
+    return _resolve(request, db, {"full", "limited"})
+
+
+def current_user_for_recovery(request: Request, db: DbSession = Depends(get_db)) -> User:
+    """Recovery requests must work for someone who cannot pass the biometric step of signing in, so the
+    'password accepted, biometrics pending' session is allowed here. Each action still asks for the password."""
+    return _resolve(request, db, {"full", "limited", "preauth"})
+
+
+def preauth_user(request: Request, db: DbSession = Depends(get_db)) -> User:
+    """Only the 'password accepted, biometrics pending' session."""
+    return _resolve(request, db, {"preauth"})
 
 
 def admin_user(user: User = Depends(current_user)) -> User:

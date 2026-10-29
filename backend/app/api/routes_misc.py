@@ -8,7 +8,7 @@ from ..deps import get_db
 from ..models import EvaluationRun, User
 from ..security import current_user
 from ..services import stats
-from ..services.demo_scenarios import run_scenarios
+from ..services.demo_scenarios import run_risk_scenarios, run_scenarios
 
 router = APIRouter(tags=["system"])
 VERSION = "0.2.0"
@@ -28,7 +28,10 @@ def health(request: Request, db: Session = Depends(get_db)):
 @router.get("/dashboard/stats")
 def dashboard_stats(request: Request, me: User = Depends(current_user), db: Session = Depends(get_db)):
     """Administrators see everything; everyone else sees only their own transactions."""
-    return stats.dashboard(db, request.app.state.registry, None if me.role == "admin" else me.id)
+    out = stats.dashboard(db, request.app.state.registry, None if me.role == "admin" else me.id)
+    out["liveness"] = request.app.state.liveness.status()
+    out["liveness_required_from"] = request.app.state.settings.liveness_required_from
+    return out
 
 
 @router.get("/policy")
@@ -36,6 +39,7 @@ def policy(request: Request, _: User = Depends(current_user)):
     """The risk rules and fusion thresholds currently in force (defaults plus any policy file)."""
     s = request.app.state
     return {"active_policy": s.settings.active_policy, "max_auth_attempts": s.settings.max_auth_attempts,
+            "liveness_required_from": s.settings.liveness_required_from, "login_biometrics": s.settings.login_biometrics,
             "risk": asdict(s.risk_cfg), "fusion": asdict(s.fusion_cfg)}
 
 
@@ -54,3 +58,11 @@ def policy_demo(request: Request, _: User = Depends(current_user)):
     return {"illustrative": True,
             "note": "Hand-written module scores run through the real fusion code. Not experimental data.",
             "scenarios": run_scenarios(s.fusion_cfg)}
+
+
+@router.get("/evaluation/risk-demo")
+def risk_demo(request: Request, _: User = Depends(current_user)):
+    """One payment under different timing, scored by the real risk engine. ILLUSTRATIVE, not measurements."""
+    return {"illustrative": True,
+            "note": "Hand-written situations scored by the real, rule-based risk engine. The weights are experimental, not learned from fraud data.",
+            "scenarios": run_risk_scenarios(request.app.state.risk_cfg)}

@@ -3,7 +3,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import create_app
-from tests.conftest import PW, auth, enroll, enroll_all, login, make_admin, make_txn, make_user
+from tests.conftest import PW, auth, delete_enrollment, enroll, enroll_all, login, make_admin, make_txn, make_user
 from tests.fakes import fake_registry
 
 
@@ -50,8 +50,8 @@ def test_enrollment_states_and_failure_is_not_enrolled(client):
     assert states["face"] == "not_enrolled"           # a failed enrollment must not count
     assert enroll(client, u["id"], "iris", b"x").status_code == 404
     enroll(client, u["id"], "face")
-    assert client.request("DELETE", f"/api/users/{u['id']}/enrollments/face", data={"password": PW}).status_code == 200
-    assert client.request("DELETE", f"/api/users/{u['id']}/enrollments/face", data={"password": PW}).status_code == 404
+    assert delete_enrollment(client, u["id"], "face").status_code == 200
+    assert delete_enrollment(client, u["id"], "face").status_code == 404
 
 
 def test_transaction_creation_computes_risk(client):
@@ -228,3 +228,97 @@ def test_policy_file_changes_real_decisions_and_is_visible(settings, tmp_path):
         t = make_txn(c, amount=50)
         d = auth(c, t["id"], face=b"match").json()
         assert d["decision"] == "additional_verification_required"            # 0.95 < 0.99, default policy would approve
+
+
+# ---- time-aware risk through the API ----
+def factor_names(txn):
+    return {f["name"] for f in txn["risk_factors"]}
+
+
+def test_rapid_payments_raise_risk_and_the_factor_is_explained(client):
+    make_user(client)
+    first, second, third = (make_txn(client, amount=50) for _ in range(3))
+    assert "velocity" not in factor_names(first) and "velocity" not in factor_names(second)
+    assert "velocity" in factor_names(third)
+    assert third["risk_score"] > first["risk_score"]
+    assert "3 payments within 10 minutes" in next(f["description"] for f in third["risk_factors"] if f["name"] == "velocity")
+
+
+def test_local_hour_is_validated_and_drives_the_night_factor(client):
+    make_user(client)
+    assert "night_hour" in factor_names(make_txn(client, amount=50, local_hour=3))
+    assert "night_hour" not in factor_names(make_txn(client, amount=50, local_hour=11))
+    assert "night_hour" not in factor_names(make_txn(client, amount=50))
+    bad = client.post("/api/transactions", json={"amount": 5, "recipient_name": "X", "recipient_account": "ACC1", "local_hour": 24})
+    assert bad.status_code == 422
+
+
+def test_risk_preview_uses_the_users_own_history(client):
+    make_user(client)
+    body = {"amount": 50}
+    assert "velocity" not in {f["name"] for f in client.post("/api/risk/assess", json=body).json()["factors"]}
+    make_txn(client, amount=50); make_txn(client, amount=50)
+    assert "velocity" in {f["name"] for f in client.post("/api/risk/assess", json=body).json()["factors"]}
+
+
+def test_usual_hours_are_learned_from_approved_payments(client):
+    u = make_user(client); enroll_all(client, u["id"])
+    for _ in range(5):                                                  # five approved payments around 14:00
+        t = make_txn(client, amount=20, local_hour=14)
+        assert auth(client, t["id"], face=b"match").json()["decision"] == "approved"
+    late = make_txn(client, amount=20, local_hour=3)
+    assert "unusual_hour" in factor_names(late) and "night_hour" not in factor_names(late)
+    assert "unusual_hour" not in factor_names(make_txn(client, amount=20, local_hour=15))
+
+
+def test_replacing_or_removing_biometrics_raises_risk_but_onboarding_does_not(client):
+    u = make_user(client)
+    enroll(client, u["id"], "face", proof=None)                          # first enrollment: normal
+    enroll(client, u["id"], "voice")                                     # adding another modality: still onboarding
+    assert "recent_biometric_change" not in factor_names(make_txn(client, amount=50))
+    assert enroll(client, u["id"], "face").status_code == 200            # replacing an existing reference
+    assert "recent_biometric_change" in factor_names(make_txn(client, amount=50))
+
+
+def test_removing_a_biometric_also_counts(client):
+    u = make_user(client)
+    enroll(client, u["id"], "face", proof=None); enroll(client, u["id"], "voice")
+    assert "recent_biometric_change" not in factor_names(make_txn(client, amount=50))
+    assert delete_enrollment(client, u["id"], "voice").status_code == 200
+    assert "recent_biometric_change" in factor_names(make_txn(client, amount=50))
+
+
+def test_new_account_factor_for_real_money(client):
+    make_user(client)
+    assert "new_account" in factor_names(make_txn(client, amount=2000))
+    assert "new_account" not in factor_names(make_txn(client, amount=100))
+
+
+def test_dashboard_has_a_timeline_and_hourly_profile(client):
+    make_user(client)
+    d = client.get("/api/dashboard/stats").json()
+    assert len(d["timeline"]) == 14 and len(d["by_hour"]) == 24 and sum(h["count"] for h in d["by_hour"]) == 0
+    make_txn(client, amount=50, local_hour=9); make_txn(client, amount=50, local_hour=9); make_txn(client, amount=50, local_hour=22)
+    d = client.get("/api/dashboard/stats").json()
+    assert d["by_hour"][9]["count"] == 2 and d["by_hour"][22]["count"] == 1
+    assert d["timeline"][-1]["pending"] == 3 and sum(day["pending"] for day in d["timeline"]) == 3
+
+
+def test_risk_demo_runs_the_real_engine(client):
+    make_user(client)
+    demo = client.get("/api/evaluation/risk-demo").json()
+    assert demo["illustrative"] is True
+    by = {s["name"]: s for s in demo["scenarios"]}
+    base = by["Baseline: 1,200 USD at 2 pm, settled account"]["score"]
+    assert by["Same payment at 3 am (user normally pays around 2 pm)"]["score"] > base
+    assert by["Same payment at 3 am for a night-shift worker"]["score"] == base
+    assert by["Fifth payment in ten minutes"]["score"] > by["Third payment in ten minutes"]["score"] > base
+    assert by["Everything at once: 3 am, rush, new account, face just replaced"]["category"] in ("high", "critical")
+
+
+def test_policy_endpoint_reports_liveness_requirement_and_core_modalities(client):
+    make_user(client)
+    p = client.get("/api/policy").json()
+    assert p["liveness_required_from"] == "never" and p["login_biometrics"] == "off"      # the test settings
+    assert p["fusion"]["core_modalities"] == ["face", "voice"]
+    assert p["fusion"]["bands"]["critical"]["require_core"] is True and p["fusion"]["bands"]["low"]["require_core"] is False

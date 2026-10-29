@@ -20,11 +20,40 @@ class User(Base):
     password_hash: Mapped[str | None] = mapped_column(String(300))
     role: Mapped[str] = mapped_column(String(10), default="user")      # user | admin
     failed_logins: Mapped[int] = mapped_column(Integer, default=0)
-    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))   # unused since lockouts became source-scoped
+    probation_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     enrollments: Mapped[list["Enrollment"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     transactions: Mapped[list["Transaction"]] = relationship(back_populates="user")
+
+
+class Device(Base):
+    """A browser the user has signed in from successfully. Identified by a random id the client keeps;
+    only a hash is stored. Used to scope lockouts so an attacker's failures cannot lock the owner out."""
+    __tablename__ = "devices"
+    __table_args__ = (UniqueConstraint("user_id", "device_hash"),)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    device_hash: Mapped[str] = mapped_column(String(32))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    last_seen: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class RecoveryRequest(Base):
+    """A request to wipe an account's biometric references because the owner cannot provide them.
+    pending -> approved (executed by an admin after the cooling-off) | denied | cancelled by the owner."""
+    __tablename__ = "recovery_requests"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    status: Mapped[str] = mapped_column(String(12), default="pending")
+    reason: Mapped[str] = mapped_column(String(300))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    earliest_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    decided_by: Mapped[int | None] = mapped_column(Integer)
+    note: Mapped[str | None] = mapped_column(String(300))
+    device_hash: Mapped[str | None] = mapped_column(String(32))
 
 
 class Session(Base):
@@ -36,6 +65,10 @@ class Session(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     revoked: Mapped[bool] = mapped_column(default=False)
+    # full: everything. limited: password only and face/voice not enrolled yet, so enrollment pages only.
+    # preauth: the password was right but the face and voice check is still pending; reaches nothing else.
+    scope: Mapped[str] = mapped_column(String(10), default="full")
+    attempts: Mapped[int] = mapped_column(Integer, default=0)       # biometric login tries made with a preauth session
 
 
 class Enrollment(Base):
@@ -66,6 +99,7 @@ class Transaction(Base):
     is_international: Mapped[bool] = mapped_column(default=False)
     new_device: Mapped[bool] = mapped_column(default=False)
     note: Mapped[str | None] = mapped_column(String(200))
+    local_hour: Mapped[int | None] = mapped_column(Integer)      # hour of day the user reported, for time-aware risk
     risk_score: Mapped[float] = mapped_column(Float)
     risk_category: Mapped[str] = mapped_column(String(12))
     risk_factors: Mapped[list] = mapped_column(JSON)
@@ -106,6 +140,10 @@ class Event(Base):
     user_id: Mapped[int | None] = mapped_column(Integer)
     transaction_id: Mapped[int | None] = mapped_column(Integer)
     detail: Mapped[dict] = mapped_column(JSON)
+    # who it came from, for scoping lockouts (hashes only, never the raw address or device id)
+    device_hash: Mapped[str | None] = mapped_column(String(32))
+    ip_hash: Mapped[str | None] = mapped_column(String(16))
+    trusted: Mapped[bool | None] = mapped_column()          # was the device a known one for this user
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 

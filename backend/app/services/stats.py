@@ -33,7 +33,24 @@ def dashboard(db: Session, registry, user_id: int | None = None) -> dict:
     recent = scoped(db.query(Transaction), Transaction).order_by(Transaction.id.desc()).limit(8).all()
     suspicious = (scoped(db.query(Transaction), Transaction).filter(Transaction.decision == "rejected")
                   .order_by(Transaction.id.desc()).limit(6).all())
+    from datetime import timedelta
+    from ..models import utcnow
+    since = utcnow() - timedelta(days=13)
+    recent_all = scoped(db.query(Transaction), Transaction).filter(Transaction.created_at >= since.replace(hour=0, minute=0, second=0, microsecond=0)).all()
+    days = {}
+    for i in range(14):
+        d = (since + timedelta(days=i)).date().isoformat()
+        days[d] = {"date": d, "approved": 0, "rejected": 0, "additional": 0, "pending": 0}
+    key = {"approved": "approved", "rejected": "rejected", "additional_verification_required": "additional", "pending": "pending"}
+    for t in recent_all:
+        d = t.created_at.date().isoformat()
+        if d in days:
+            days[d][key.get(t.decision, "pending")] += 1
+    by_hour = [0] * 24
+    for (h, created) in scoped(db.query(Transaction.local_hour, Transaction.created_at), Transaction).all():
+        by_hour[h if h is not None else created.hour] += 1
     return {
+        "timeline": list(days.values()), "by_hour": [{"hour": h, "count": c} for h, c in enumerate(by_hour)],
         "total_transactions": total,
         "pending": by_decision.get("pending", 0),
         "approved": by_decision.get("approved", 0),

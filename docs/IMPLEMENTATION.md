@@ -49,6 +49,20 @@ Defaults (`calibration.py`): face center 0.363 scale 0.06; voice center 0.25 sca
 | Transaction type: cash withdrawal 5, wire transfer 8, others 0 | 0 to 8 |
 | Amount above 3x the user's mean approved amount (needs at least 3 approved transactions) | 12 |
 
+**Time-aware factors.** The same payment is riskier depending on when it happens and how it fits the user's recent past. These need the user's history, so they are computed from the database when a transaction is created (`authentication.build_risk_input`); the live risk preview on the payment form uses the same history.
+
+| Factor | Points | Rule |
+|---|---|---|
+| Velocity | 10 or 20 | 2 or more earlier payments in the last 10 minutes gives 10, 4 or more gives 20 |
+| Daily total | 10 | payments in the last 24 hours plus this one reach 10,000 USD (a single large payment is the amount factor's job) |
+| Unusual hour | 8 | with at least 5 approved payments, the hour is more than 6 hours (circular) from the user's typical hour, a circular mean of their approved hours; if the hours are spread around the clock there is no profile |
+| Night hour | 8 | only when there is no learned profile: 00:00 to 04:59 |
+| New account | 10 | account under 24 hours old and amount 1,000 USD or more |
+| Dormant account | 8 | no payment for 60 days and amount 1,000 USD or more |
+| Recent biometric change | 12 | a biometric reference was replaced or removed in the last 24 hours (adding another modality during onboarding does not count) |
+
+The hour of day is sent by the browser (`local_hour`, 0 to 23); the server has no timezone information, and a client can lie about it. Without it the hour factors do not apply. All thresholds and points are in `RiskConfig` and can be overridden in the policy file. These are hand-set rules, not a trained model, and I did not evaluate how well they separate fraud from normal behaviour because I have no such data. The Analytics page has an illustrative table showing one payment scored under different timing.
+
 Categories: low below 25, medium 25 to 49.99, high 50 to 74.99, critical 75 and above. These weights are chosen by hand, not learned from fraud data. It is not a fraud detection model. All of it can be overridden through the policy file (below).
 
 ## Fusion and decisions
@@ -61,19 +75,19 @@ Categories: low below 25, medium 25 to 49.99, high 50 to 74.99, critical 75 and 
 
 1. Reliability weight per evaluable modality: `w * (0.4 + 0.6 * quality)`. A poor-quality sample counts less but never zero.
 2. Fused score: reliability-weighted mean of calibrated scores.
-3. Coverage: sum of reliability weights divided by the sum of base weights. This is how much of the full three-modality evidence we have, so it is 1.0 for three perfect samples and about 0.33 for one.
+3. Coverage: sum of reliability weights of the usable modalities divided by the sum of the **core** modalities' base weights (face and voice), capped at 1. Fingerprint is optional: when it is present it adds evidence to the fused score, and when it is absent it never lowers coverage or asks the user for anything. Face alone gives about 0.5, face and voice with good samples about 0.9 to 1.
 4. The transaction's risk category selects a band:
 
-| Risk | approve at | reject below | min modalities | min coverage | conflict floor |
-|---|---|---|---|---|---|
-| low | 0.60 | 0.30 | 1 | 0.30 | 0.00 |
-| medium | 0.70 | 0.35 | 2 | 0.50 | 0.15 |
-| high | 0.80 | 0.40 | 2 | 0.60 | 0.25 |
-| critical | 0.88 | 0.45 | 3 | 0.70 | 0.35 |
+| Risk | approve at | reject below | min modalities | min coverage | conflict floor | face and voice both required |
+|---|---|---|---|---|---|---|
+| low | 0.60 | 0.30 | 1 | 0.30 | 0.50 | no |
+| medium | 0.70 | 0.35 | 2 | 0.50 | 0.50 | no |
+| high | 0.80 | 0.40 | 2 | 0.60 | 0.50 | yes |
+| critical | 0.88 | 0.45 | 2 | 0.70 | 0.50 | yes |
 
-5. Decision: fused below the reject threshold gives **rejected**. Fused at or above the approve threshold, with enough modalities, enough coverage, and no evaluable modality below the conflict floor, gives **approved**. Everything else gives **additional verification required**. Nothing evaluable also gives additional verification, because "could not be evaluated" is not evidence of an impostor.
+5. Decision: fused below the reject threshold gives **rejected**. Fused at or above the approve threshold, with enough modalities, enough coverage, and no evaluable modality below the conflict floor, gives **approved**. The floor is 0.50 in every band, which is each module's own match line, so **every modality that was evaluated must itself be a match**: a clear "no" from one modality can never be averaged away by a strong "yes" from another. An unusable sample (blurry, silent, wrong file) is not evaluated and is not a "no"; it simply provides no evidence. Everything else gives **additional verification required**. Nothing evaluable also gives additional verification, because "could not be evaluated" is not evidence of an impostor.
 
-So risk changes the policy in three ways: a higher bar, more required modalities, and less tolerance for one modality contradicting the others. It is not the biometric score multiplied by a risk number. Missing modalities never add to the fused score. They only reduce coverage, which is what stops a single excellent face score from approving a critical transaction.
+So risk changes the policy in three ways: a higher bar, more required evidence (for high and critical payments both face and voice, the same two modalities that sign-in needs; a fingerprint cannot stand in for either), and no tolerance for one modality contradicting the others. It is not the biometric score multiplied by a risk number. Missing modalities never add to the fused score. A missing core modality reduces coverage and, at high and critical risk, blocks approval outright, which is what stops a single excellent face score from approving a large payment. The optional fingerprint changes nothing when it is missing.
 
 All numbers above are experimental starting points chosen by reasoning, not tuned on transaction data. They are meant to be changed. A JSON file named in `TRILOCK_POLICY_FILE` overrides any of them, for example:
 
@@ -100,3 +114,13 @@ Unknown keys are rejected at startup so a typo cannot silently do nothing.
 ## Access control and abuse limits
 
 Short version: bearer sessions, scrypt passwords, per-user data isolation, password re-entry for enrollment changes, login and biometric lockouts, guarded transaction closing. Full table with tests in [SECURITY.md](SECURITY.md). The lockout windows, session length, password length and score visibility are settings (`TRILOCK_*`, see `config.py`).
+
+## Liveness
+
+`biometrics/liveness.py` (face) and `biometrics/voice_liveness.py` (voice), called from `services/authentication.py` when a challenge is present or the transaction's risk is at or above `TRILOCK_LIVENESS_REQUIRED_FROM` (default `high`).
+
+Face: from YuNet's five landmarks per frame, a yaw proxy `(nose_x - mid_eye_x) / eye_distance`. A turn must change it by at least 0.25 in the requested direction. A homography fitted on the eyes and mouth corners maps frame A to frame B; for a flat picture it predicts the nose, for a head it does not, and the miss must be at least 0.15 eye distances. The largest single-frame yaw jump must stay under 70% of the movement (a swap between two photos jumps), and SFace embeddings before and after must agree (cosine 0.25). The frontal first frame is then verified against the enrolled face as usual.
+
+Voice: three random words from a vocabulary of 48; faster-whisper `tiny.en` transcribes the audio and at least 2 words must be recognised (exact or near spelling). Speaker verification runs on the same audio.
+
+Both fail closed (a missing checker is "not evaluated"), challenges are one-time and bound to the user, and a failed check vetoes approval on that attempt. What they do not stop, and how they were measured, is in [SECURITY.md](SECURITY.md) and [EVALUATION.md](EVALUATION.md).

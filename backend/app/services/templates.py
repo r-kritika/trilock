@@ -40,6 +40,7 @@ class TemplateStore:
         buf = io.BytesIO()
         np.savez_compressed(buf, **template)
         path = self._path(user_id, modality)
+        self.root.mkdir(parents=True, exist_ok=True)       # the folder may have been removed since start-up
         path.write_bytes(self._fernet.encrypt(buf.getvalue()))
         return path.name
 

@@ -10,8 +10,25 @@ from app.biometrics.calibration import DEFAULTS
 from app.evaluation.synthetic import impression, to_png
 from app.main import create_app
 from app.models import Event, Session as Sess, User, utcnow
-from tests.conftest import PW, auth, enroll, enroll_all, login, make_admin, make_txn, make_user
+from tests.conftest import (PW, auth, delete_account, delete_enrollment, enroll, enroll_all, login, make_admin,
+                            make_txn, make_user)
 from tests.fakes import FakeModule, fake_registry
+
+
+def age_events(client, kind, minutes=0, hours=0):
+    """Pretend `kind` events happened a while ago (moves them out of the lockout window)."""
+    with client.app.state.session_factory() as db:
+        for e in db.query(Event).filter_by(kind=kind):
+            e.created_at = utcnow() - timedelta(minutes=minutes, hours=hours)
+        db.commit()
+
+
+def age_devices(client, hours):
+    from app.models import Device
+    with client.app.state.session_factory() as db:
+        for d in db.query(Device):
+            d.created_at = utcnow() - timedelta(hours=hours)
+        db.commit()
 
 
 def new_client(settings):
@@ -100,10 +117,8 @@ def test_login_lockout_after_repeated_failures(client):
     for _ in range(5):
         assert client.post("/api/auth/login", json={"email": "ada@example.com", "password": "x" * 12}).status_code == 401
     r = client.post("/api/auth/login", json={"email": "ada@example.com", "password": PW})   # correct, but locked
-    assert r.status_code == 429 and r.json()["error"]["code"] == "account_locked"
-    with client.app.state.session_factory() as db:
-        db.query(User).update({"locked_until": utcnow() - timedelta(seconds=1)})
-        db.commit()
+    assert r.status_code == 429 and r.json()["error"]["code"] == "too_many_attempts"
+    age_events(client, "login_failed", minutes=16)                       # the window passes
     assert client.post("/api/auth/login", json={"email": "ada@example.com", "password": PW}).status_code == 200
 
 
@@ -314,8 +329,9 @@ def test_erase_account_removes_everything(settings):
         t = make_txn(c, amount=50); auth(c, t["id"], face=b"match")
         tpl_dir = settings.data_dir / "templates"
         assert len(list(tpl_dir.iterdir())) == 3
-        assert c.request("DELETE", f"/api/users/{u['id']}", data={"password": "nope-nope-nope"}).status_code == 403
-        assert c.request("DELETE", f"/api/users/{u['id']}", data={"password": PW}).status_code == 204
+        assert delete_account(c, u["id"], password="nope-nope-nope").status_code == 403
+        assert delete_account(c, u["id"], proof=b"nomatch").status_code == 403          # password alone is not enough
+        assert delete_account(c, u["id"]).status_code == 204
         assert list(tpl_dir.iterdir()) == []
         with c.app.state.session_factory() as db:
             from app.models import AuthAttempt, Enrollment, Transaction
@@ -364,3 +380,333 @@ def test_search_wildcards_are_literal(client):
     assert client.get("/api/transactions", params={"q": "%"}).json()["total"] == 1       # only the name containing a real %
     assert client.get("/api/transactions", params={"q": "_"}).json()["total"] == 1
     assert client.get("/api/transactions", params={"q": "x" * 101}).status_code == 422   # length-capped
+
+
+
+# ---- biometric proof for changing biometrics (stolen-password scenario) ----
+def states(client):
+    return {e["modality"]: e["state"] for e in client.get("/api/auth/me").json()["enrollments"]}
+
+
+def test_first_enrollment_needs_only_the_password(client):
+    u = make_user(client)
+    assert enroll(client, u["id"], "face", proof=None).status_code == 200
+
+
+def test_second_enrollment_needs_proof_of_the_first(client):
+    u = make_user(client)
+    enroll(client, u["id"], "face", proof=None)
+    r = enroll(client, u["id"], "voice", proof=None)                       # password correct, no proof
+    assert r.status_code == 403 and r.json()["error"]["code"] == "biometric_proof_required"
+    assert states(client)["voice"] == "not_enrolled"
+    assert enroll(client, u["id"], "voice").status_code == 200              # with a genuine face sample
+
+
+def test_stolen_password_cannot_replace_the_owners_biometrics(client):
+    """The attacker knows the password and holds a session, but has not got the owner's face or voice."""
+    u = make_user(client); enroll_all(client, u["id"])
+    # a different person's samples (3 tries, under the lockout limit of 5), then an unusable sample
+    r = enroll(client, u["id"], "face", sample=b"match", proof=b"nomatch")
+    assert r.status_code == 403 and r.json()["error"]["code"] == "biometric_proof_required"
+    assert delete_enrollment(client, u["id"], "face", proof=b"nomatch").status_code == 403
+    assert delete_account(client, u["id"], proof=b"nomatch").status_code == 403
+    assert enroll(client, u["id"], "face", sample=b"match", proof=b"bad").status_code == 403
+    assert enroll(client, u["id"], "face", proof=None).status_code == 403   # no proof at all
+    assert list(states(client).values()) == ["enrolled"] * 3                # nothing changed
+    assert client.get("/api/auth/me").status_code == 200                    # and the account still exists
+
+
+def test_two_proofs_are_required_when_two_or_more_are_enrolled(client):
+    u = make_user(client)
+    enroll(client, u["id"], "face", proof=None)
+    enroll(client, u["id"], "voice")
+    uid = u["id"]
+    one = [("files", ("s.bin", b"match")), ("proof_face", ("p.bin", b"match"))]
+    r = client.post(f"/api/users/{uid}/enrollments/fingerprint", files=one, data={"password": PW})
+    assert r.status_code == 403                                             # only one of the two required proofs
+    two = one + [("proof_voice", ("p.bin", b"match"))]
+    assert client.post(f"/api/users/{uid}/enrollments/fingerprint", files=two, data={"password": PW}).status_code == 200
+    half_bad = [("files", ("s.bin", b"match")), ("proof_face", ("p.bin", b"match")), ("proof_voice", ("p.bin", b"nomatch"))]
+    assert client.post(f"/api/users/{uid}/enrollments/face", files=half_bad, data={"password": PW}).status_code == 403
+
+
+def test_proof_for_a_modality_that_is_not_enrolled_counts_for_nothing(client):
+    u = make_user(client)
+    enroll(client, u["id"], "face", proof=None)
+    files = [("files", ("s.bin", b"match")), ("proof_voice", ("p.bin", b"match")), ("proof_fingerprint", ("p.bin", b"match"))]
+    assert client.post(f"/api/users/{u['id']}/enrollments/voice", files=files, data={"password": PW}).status_code == 403
+
+
+def test_wrong_password_is_rejected_even_with_perfect_proof(client):
+    u = make_user(client); enroll_all(client, u["id"])
+    assert enroll(client, u["id"], "face", password="wrong-password-123").status_code == 403
+    assert enroll(client, u["id"], "face", password="wrong-password-123").json()["error"]["code"] == "password_required"
+
+
+def test_failed_proofs_feed_the_lockout(client):
+    u = make_user(client); enroll_all(client, u["id"])
+    codes = [enroll(client, u["id"], "face", proof=b"nomatch").status_code for _ in range(7)]
+    # each try sends three wrong proofs but counts once; after 5 failures further tries are blocked
+    assert codes[:5] == [403] * 5 and codes[5:] == [429, 429]
+    assert client.get(f"/api/users/{u['id']}/enrollments").status_code == 200       # account itself still readable
+    assert enroll(client, u["id"], "face").status_code == 429                         # even the real owner waits
+
+
+# ---- lockouts are scoped to the source, so an attacker cannot lock the owner out ----
+OWNER, ATTACKER = {"X-Device-Id": "owner-device-0123456789"}, {"X-Device-Id": "attacker-dev-0123456789"}
+
+
+def attack_logins(client, device, n, email="ada@example.com"):
+    return [client.post("/api/auth/login", headers=device, json={"email": email, "password": "x" * 12}).status_code
+            for _ in range(n)]
+
+
+def forwarded(ip, device):
+    return {**device, "X-Forwarded-For": ip}
+
+
+def test_attacker_cannot_lock_the_owner_out_of_login(settings):
+    settings.trust_proxy_headers = True                       # lets this test play two different networks
+    with new_client(settings) as c:
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        assert c.post("/api/auth/login", headers=forwarded("10.0.0.1", OWNER), json={"email": "ada@example.com", "password": PW}).status_code == 200
+        # an attacker hammers the account from elsewhere
+        codes = attack_logins(c, forwarded("66.6.6.6", ATTACKER), 8)
+        assert codes[:5] == [401] * 5 and codes[5:] == [429] * 3
+        # the owner, on their known device, is unaffected, even from the same network as the attacker
+        for ip in ("10.0.0.1", "66.6.6.6"):
+            r = c.post("/api/auth/login", headers=forwarded(ip, OWNER), json={"email": "ada@example.com", "password": PW})
+            assert r.status_code == 200, ip
+        # and the attacker stays blocked even with the right password
+        r = c.post("/api/auth/login", headers=forwarded("66.6.6.6", ATTACKER), json={"email": "ada@example.com", "password": PW})
+        assert r.status_code == 429
+
+
+def test_owner_known_device_has_its_own_higher_allowance(settings):
+    with new_client(settings) as c:
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        c.post("/api/auth/login", headers=OWNER, json={"email": "ada@example.com", "password": PW})
+        codes = attack_logins(c, OWNER, 11)
+        assert codes[:10] == [401] * 10 and codes[10] == 429          # typos are tolerated up to 10, then this device waits
+
+
+def test_unknown_sources_are_blocked_together_but_established_devices_keep_working(settings):
+    settings.max_failed_logins = 1000           # isolate the account-wide rule
+    settings.ip_failed_logins = 1000
+    settings.account_untrusted_failed_logins = 6
+    with new_client(settings) as c:
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        c.post("/api/auth/login", headers=OWNER, json={"email": "ada@example.com", "password": PW})
+        age_devices(c, hours=48)                                       # owner's device is established
+        for i in range(6):                                              # six different unknown sources
+            attack_logins(c, {"X-Device-Id": f"attacker-dev-{i:010d}-xx"}, 1)
+        fresh = {"X-Device-Id": "attacker-fresh-0123456789"}
+        assert c.post("/api/auth/login", headers=fresh, json={"email": "ada@example.com", "password": PW}).status_code == 429
+        assert c.post("/api/auth/login", headers=OWNER, json={"email": "ada@example.com", "password": PW}).status_code == 200
+
+
+def test_one_network_cannot_hammer_many_accounts(settings):
+    settings.ip_failed_logins = 6
+    with new_client(settings) as c:
+        codes = [c.post("/api/auth/login", json={"email": f"nobody{i}@example.com", "password": "x" * 12}).status_code for i in range(8)]
+        assert codes[:6] == [401] * 6 and codes[6:] == [429, 429]
+
+
+def test_new_devices_per_day_are_limited(settings):
+    with new_client(settings) as c:
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        codes = [c.post("/api/auth/login", headers={"X-Device-Id": f"device-number-{i:010d}"},
+                        json={"email": "ada@example.com", "password": PW}).status_code for i in range(5)]
+        assert codes == [200, 200, 200, 429, 429]
+        # a device that already signed in is not a new one
+        assert c.post("/api/auth/login", headers={"X-Device-Id": "device-number-0000000001"},
+                      json={"email": "ada@example.com", "password": PW}).status_code == 200
+
+
+def test_proxy_header_is_ignored_unless_trusted(settings):
+    with new_client(settings) as c:                              # trust_proxy_headers defaults to False
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        codes = [c.post("/api/auth/login", headers={"X-Forwarded-For": f"1.1.1.{i}"},
+                        json={"email": "ada@example.com", "password": "x" * 12}).status_code for i in range(6)]
+        assert codes[5] == 429                                   # spoofing the header does not reset the counter
+
+
+def test_malformed_device_id_is_treated_as_no_device(settings):
+    with new_client(settings) as c:
+        c.post("/api/auth/register", json={"full_name": "Ada A", "email": "ada@example.com", "password": PW})
+        r = c.post("/api/auth/login", headers={"X-Device-Id": "short"}, json={"email": "ada@example.com", "password": PW})
+        assert r.status_code == 200
+        with c.app.state.session_factory() as db:
+            from app.models import Device
+            assert db.query(Device).count() == 0
+
+
+def test_attacker_failures_do_not_block_the_owners_biometrics(settings):
+    """Biometric lockout is per source too. The owner's established device keeps working."""
+    settings.trust_proxy_headers = True
+    with new_client(settings) as c:
+        u = make_user(c)
+        owner_h = forwarded("10.0.0.1", OWNER)
+        c.headers.update(owner_h)
+        login(c, "ada@example.com")
+        enroll_all(c, u["id"])
+        age_devices(c, hours=48)
+        c.headers.pop("Authorization")
+        # attacker with the password signs in from another place and fails repeatedly
+        att = forwarded("66.6.6.6", ATTACKER)
+        c.headers.update(att)
+        login(c, "ada@example.com")
+        codes = [auth(c, make_txn(c, amount=50)["id"], face=b"nomatch", voice=b"nomatch").status_code for _ in range(7)]
+        assert codes[:5] == [200] * 5 and codes[5:] == [429, 429]
+        # the owner, on their device, is not blocked
+        c.headers.pop("Authorization")
+        c.headers.update(owner_h)
+        login(c, "ada@example.com")
+        assert auth(c, make_txn(c, amount=50)["id"], face=b"match").status_code == 200
+
+
+
+# ---- recovery workflow (replaces the single-admin reset) ----
+def recovery_setup(client):
+    """Alice has biometrics; returns (alice_token_header, admin_token_header, alice)."""
+    alice = make_user(client, "Alice A", "alice@example.com"); enroll_all(client, alice["id"])
+    ha = client.headers["Authorization"]
+    client.headers.pop("Authorization")
+    make_admin(client)
+    hadm = client.headers["Authorization"]
+    client.headers["Authorization"] = ha
+    return ha, hadm, alice
+
+
+def request_recovery(client, password=PW, reason="new phone and face changed"):
+    return client.post("/api/recovery", data={"reason": reason, "password": password})
+
+
+def expire_cooling_off(client):
+    from app.models import RecoveryRequest
+    with client.app.state.session_factory() as db:
+        for r in db.query(RecoveryRequest):
+            r.earliest_at = utcnow() - timedelta(minutes=1)
+        db.commit()
+
+
+def test_there_is_no_direct_admin_reset_any_more(client):
+    ha, hadm, alice = recovery_setup(client)
+    client.headers["Authorization"] = hadm
+    assert client.post(f"/api/users/{alice['id']}/reset-biometrics").status_code in (404, 405)
+
+
+def test_recovery_request_needs_password_and_enrolled_biometrics(client):
+    u = make_user(client)
+    assert request_recovery(client).json()["error"]["code"] == "nothing_to_recover"   # nothing enrolled yet
+    enroll(client, u["id"], "face", proof=None)
+    assert request_recovery(client, password="wrong-password-123").status_code == 403
+    r = request_recovery(client)
+    assert r.status_code == 201 and r.json()["status"] == "pending" and r.json()["can_approve"] is False
+    assert request_recovery(client).json()["error"]["code"] == "already_pending"
+
+
+def test_owner_sees_pending_request_and_can_cancel_it(client):
+    ha, hadm, alice = recovery_setup(client)
+    rid = request_recovery(client).json()["id"]
+    me = client.get("/api/auth/me").json()
+    assert me["recovery"][0]["id"] == rid and me["recovery"][0]["status"] == "pending"      # banner data
+    # someone else cannot cancel it
+    client.headers.pop("Authorization")
+    make_user(client, "Mallory M", "mallory@example.com")
+    assert client.post(f"/api/recovery/{rid}/cancel", data={"password": PW}).status_code == 404
+    client.headers["Authorization"] = ha
+    assert client.post(f"/api/recovery/{rid}/cancel", data={"password": "wrong-password-123"}).status_code == 403
+    assert client.post(f"/api/recovery/{rid}/cancel", data={"password": PW}).json()["status"] == "cancelled"
+    assert client.get("/api/auth/me").json()["recovery"] == []
+    # a cancelled request can never be approved
+    client.headers["Authorization"] = hadm
+    expire_cooling_off(client)
+    assert client.post(f"/api/recovery/{rid}/approve").json()["error"]["code"] == "not_pending"
+
+
+def test_admin_cannot_approve_during_cooling_off(client):
+    ha, hadm, alice = recovery_setup(client)
+    rid = request_recovery(client).json()["id"]
+    client.headers["Authorization"] = hadm
+    r = client.post(f"/api/recovery/{rid}/approve")
+    assert r.status_code == 409 and r.json()["error"]["code"] == "cooling_off"
+    assert list(states_of(client, alice["id"]).values()) == ["enrolled"] * 3               # nothing was deleted
+
+
+def states_of(client, uid):
+    return {e["modality"]: e["state"] for e in client.get(f"/api/users/{uid}").json()["enrollments"]}
+
+
+def test_approval_after_cooling_off_wipes_references_and_starts_probation(settings):
+    with new_client(settings) as c:
+        ha, hadm, alice = recovery_setup(c)
+        rid = request_recovery(c).json()["id"]
+        c.headers["Authorization"] = hadm
+        expire_cooling_off(c)
+        pend = c.get("/api/recovery", params={"status": "pending"}).json()
+        assert pend[0]["user_email"] == "alice@example.com" and pend[0]["can_approve"] is True
+        r = c.post(f"/api/recovery/{rid}/approve", data={"note": "confirmed by phone"})
+        assert r.status_code == 200 and r.json()["status"] == "approved"
+        assert list(states_of(c, alice["id"]).values()) == ["not_enrolled"] * 3
+        assert not list((settings.data_dir / "templates").iterdir())                         # templates really deleted
+        with c.app.state.session_factory() as db:
+            ev = db.query(Event).filter_by(kind="biometrics_reset_by_admin").one()
+            assert ev.user_id == alice["id"] and ev.detail["modalities"]
+            assert db.get(User, alice["id"]).probation_until is not None
+        assert c.post(f"/api/recovery/{rid}/approve").json()["error"]["code"] == "not_pending"
+        # only admins can see or decide requests
+        c.headers["Authorization"] = ha
+        assert c.get("/api/recovery").status_code == 403 and c.post(f"/api/recovery/{rid}/approve").status_code == 403
+
+
+def test_denied_request_changes_nothing(client):
+    ha, hadm, alice = recovery_setup(client)
+    rid = request_recovery(client).json()["id"]
+    client.headers["Authorization"] = hadm
+    r = client.post(f"/api/recovery/{rid}/deny", data={"note": "could not reach the owner"})
+    assert r.json()["status"] == "denied"
+    assert list(states_of(client, alice["id"]).values()) == ["enrolled"] * 3
+    client.headers["Authorization"] = ha
+    assert client.get("/api/auth/me").json()["recovery"] == []                               # denied requests are not shown as live
+
+
+def test_probation_blocks_high_value_transactions_only_until_it_ends(client):
+    ha, hadm, alice = recovery_setup(client)
+    rid = request_recovery(client).json()["id"]
+    client.headers["Authorization"] = hadm
+    expire_cooling_off(client)
+    client.post(f"/api/recovery/{rid}/approve")
+    client.headers["Authorization"] = ha
+    assert client.get("/api/auth/me").json()["probation_until"] is not None
+    enroll_all(client, alice["id"])                                         # whoever re-enrolls (password only now)
+    big = make_txn(client, amount=25000, recipient_is_new=True, is_international=True)
+    assert big["decision"] == "rejected" and "recently reset" in big["decision_reason"]
+    assert auth(client, big["id"], face=b"match", voice=b"match").status_code == 409        # cannot be authenticated into approval
+    small = make_txn(client, amount=50)
+    assert small["decision"] == "pending" and auth(client, small["id"], face=b"match").json()["decision"] == "approved"
+    with client.app.state.session_factory() as db:                          # probation over
+        db.query(User).filter_by(id=alice["id"]).update({"probation_until": utcnow() - timedelta(minutes=1)})
+        db.commit()
+    assert make_txn(client, amount=25000, recipient_is_new=True, is_international=True)["decision"] == "pending"
+
+
+def test_recovery_attempt_is_audited(client):
+    ha, hadm, alice = recovery_setup(client)
+    request_recovery(client)
+    with client.app.state.session_factory() as db:
+        assert db.query(Event).filter_by(kind="recovery_requested", user_id=alice["id"]).count() == 1
+
+
+def test_erasing_an_account_with_devices_and_recovery_requests_works(settings):
+    """Devices and recovery requests reference the user; erasure must remove them too."""
+    from app.models import Device, RecoveryRequest
+    with new_client(settings) as c:
+        c.headers.update(OWNER)
+        u = make_user(c); enroll_all(c, u["id"])
+        assert request_recovery(c).status_code == 201
+        with c.app.state.session_factory() as db:
+            assert db.query(Device).count() == 1 and db.query(RecoveryRequest).count() == 1
+        assert delete_account(c, u["id"]).status_code == 204
+        with c.app.state.session_factory() as db:
+            assert db.query(Device).count() == 0 and db.query(RecoveryRequest).count() == 0 and db.query(User).count() == 0

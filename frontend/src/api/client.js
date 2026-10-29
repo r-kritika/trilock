@@ -15,12 +15,27 @@ export const setToken = (t) => {
   try { t ? sessionStorage.setItem(TOKEN_KEY, t) : sessionStorage.removeItem(TOKEN_KEY) } catch { /* storage blocked */ }
 }
 
+// A random id this browser keeps (localStorage). The server stores only its hash and uses it to tell the
+// owner's known browser apart from strangers, so an attacker's failed attempts cannot lock the owner out.
+function deviceId() {
+  try {
+    let id = localStorage.getItem('trilock_device')
+    if (!id) {
+      id = (crypto.randomUUID?.() || `${Date.now()}${Math.random()}`).replace(/[^A-Za-z0-9_-]/g, '') + Math.random().toString(36).slice(2, 10)
+      localStorage.setItem('trilock_device', id)
+    }
+    return id
+  } catch { return null }
+}
+
 async function request(path, options = {}) {
   let res
   try {
-    const token = getToken()
-    const headers = { ...(options.headers || {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) }
-    res = await fetch(`/api${path}`, { ...options, headers })
+    const token = options.token || getToken()
+    const dev = deviceId()
+    const headers = { ...(options.headers || {}), ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(dev ? { 'X-Device-Id': dev } : {}) }
+    const { token: _t, ...fetchOptions } = options
+    res = await fetch(`/api${path}`, { ...fetchOptions, headers })
   } catch {
     throw new ApiError(0, 'network', 'Cannot reach the TriLock backend. Is it running on port 8000?')
   }
@@ -50,27 +65,50 @@ function form(entries) {
   return { method: 'POST', body: fd }
 }
 
+const proofEntries = (proofs) => Object.entries(proofs).filter(([, v]) => v).map(([k, v]) => [`proof_${k}`, v])
+
 export const api = {
   health: () => request('/health'),
   dashboard: () => request('/dashboard/stats'),
   policy: () => request('/policy'),
   register: (data) => request('/auth/register', json('POST', data)),
   login: (data) => request('/auth/login', json('POST', data)),
+  // second sign-in step; `token` is the short-lived pre-auth token from the password step
+  loginChallenge: (token) => request('/auth/login/challenge', { method: 'POST', token }),
+  loginBiometric: (token, challengeId, frames, voice) => request('/auth/login/biometric', {
+    method: 'POST', token,
+    body: form([['challenge_id', challengeId], ...frames.map((f) => ['face_frames', f]), ['voice', voice]]).body,
+  }),
+  requestRecoveryWith: (token, reason, password) => request('/recovery', { method: 'POST', token, body: form([['reason', reason], ['password', password]]).body }),
   logout: () => request('/auth/logout', { method: 'POST' }),
   me: () => request('/auth/me'),
   users: () => request('/users'),
-  // changing biometric references needs the account password again
-  enroll: (userId, modality, files, password) =>
-    request(`/users/${userId}/enrollments/${modality}`, form([...files.map((f) => ['files', f]), ['password', password]])),
-  removeEnrollment: (userId, modality, password) =>
-    request(`/users/${userId}/enrollments/${modality}`, { method: 'DELETE', body: form([['password', password]]).body }),
-  deleteAccount: (userId, password) =>
-    request(`/users/${userId}`, { method: 'DELETE', body: form([['password', password]]).body }),
+  // Changing biometrics needs the password and, if some are already enrolled, matching proof samples
+  // ({ face: Blob, voice: Blob, fingerprint: Blob }) from those enrolled modalities.
+  enroll: (userId, modality, files, password, proofs = {}) =>
+    request(`/users/${userId}/enrollments/${modality}`, form([...files.map((f) => ['files', f]), ['password', password], ...proofEntries(proofs)])),
+  removeEnrollment: (userId, modality, password, proofs = {}) =>
+    request(`/users/${userId}/enrollments/${modality}`, { method: 'DELETE', body: form([['password', password], ...proofEntries(proofs)]).body }),
+  deleteAccount: (userId, password, proofs = {}) =>
+    request(`/users/${userId}`, { method: 'DELETE', body: form([['password', password], ...proofEntries(proofs)]).body }),
   riskPreview: (data) => request('/risk/assess', json('POST', data)),
   createTransaction: (data) => request('/transactions', json('POST', data)),
-  authenticate: (id, samples) => request(`/transactions/${id}/authenticate`, form(Object.entries(samples))),
+  // live = { challengeId, faceFrames: Blob[] } when a liveness challenge is being answered
+  authenticate: (id, samples, live = null) => request(`/transactions/${id}/authenticate`, form([
+    ...Object.entries(samples),
+    ...(live?.challengeId ? [['challenge_id', live.challengeId]] : []),
+    ...((live?.faceFrames || []).map((f) => ['face_frames', f])),
+  ])),
+  livenessChallenge: () => request('/liveness/challenge', { method: 'POST' }),
+  requestRecovery: (reason, password) => request('/recovery', { method: 'POST', body: form([['reason', reason], ['password', password]]).body }),
+  myRecovery: () => request('/recovery/mine'),
+  cancelRecovery: (id, password) => request(`/recovery/${id}/cancel`, { method: 'POST', body: form([['password', password]]).body }),
+  recoveryQueue: (status = 'pending') => request(`/recovery?status=${status}`),
+  approveRecovery: (id, note) => request(`/recovery/${id}/approve`, { method: 'POST', body: form([['note', note || '']]).body }),
+  denyRecovery: (id, note) => request(`/recovery/${id}/deny`, { method: 'POST', body: form([['note', note || '']]).body }),
   transaction: (id) => request(`/transactions/${id}`),
   transactions: (params) => request(`/transactions?${new URLSearchParams(params)}`),
   evaluationRuns: () => request('/evaluation/runs'),
   policyDemo: () => request('/evaluation/policy-demo'),
+  riskDemo: () => request('/evaluation/risk-demo'),
 }

@@ -81,38 +81,72 @@ The quality gates refuse most degraded face and voice input instead of guessing,
 
 ### Fixed vs risk-aware fusion
 
-Data: face (real), voice (real), fingerprint (**synthetic**). Because of the synthetic fingerprint scores and the assumed risk mix, this is a comparison of policy behaviour, not evidence of real-world accuracy. Condition "all available modalities", overall (risk-mix weighted), 5 repeats of 1000 attempts per cell:
+Data: face (real), voice (real), fingerprint (**synthetic**). Because of the synthetic fingerprint scores and the assumed risk mix, this is a comparison of policy behaviour, not evidence of real-world accuracy. These numbers were produced with the current policy, where face and voice are the required core for high and critical payments and fingerprint is optional (see IMPLEMENTATION.md). Condition "all available modalities", overall (risk-mix weighted), 5 repeats of 1000 attempts per cell:
 
 | Policy | FAR zero effort | FRR | Genuine asked for more | Worst bypass | Worst omission attack |
 |---|---|---|---|---|---|
 | Fixed | 0.00% | 0.06% | 0.0% | 0.1% | **100.0%** |
 | Fixed + min 2 modalities | 0.00% | 0.06% | 0.1% | 0.0% | 0.0% |
-| Risk-aware | 0.00% | 0.00% | 2.6% | 0.1% | **40.0%** |
+| Risk-aware | 0.00% | 0.00% | 6.8% | 0.0% | **40.0%** |
 
 Other conditions (full table in `backend/reports/REPORT.md`):
 
 | Condition | Fixed: genuine asked for more / worst omission or bypass | Fixed + min 2 | Risk-aware |
 |---|---|---|---|
-| voice missing | 0.0% / omission 100% | 9.1% / 0% | 19.3% / 40% |
-| only face | 8.3% / bypass 90.1% | 99.4% / 0% | 85.0% / 14.5% |
+| fingerprint missing (the normal case, it is optional) | 0.2% / omission 91.2% | 10.3% / 0% | 10.8% / 38.0% |
+| voice missing | 0.0% / omission 100% | 9.1% / 0% | 33.2% / 40% |
+| only face | 8.3% / bypass 90.1% | 99.4% / 0% | 63.2% / 36.4% |
 | only voice | 1.4% / bypass 88.5% | 90.1% / 0% | 61.4% / 37.3% |
-| all inputs degraded | 0.2% / omission 73.3% | 4.1% / 0% | 33.1% / 3.4% |
+| all inputs degraded | 0.2% / omission 73.3% | 4.1% / 0% | 38.6% / 31.9% |
 
 ![conditions](figures/fusion_conditions.png)
 ![tradeoff](figures/fusion_tradeoff.png)
 
-Per risk level (all modalities present), the risk-aware policy's friction is concentrated where it is meant to be: 0.0% for low, 0.1% for medium, 3.5% for high and 18.8% for critical transactions.
+Per risk level (all modalities present), the risk-aware policy's friction is concentrated where it is meant to be: 2.7% for low, 3.7% for medium, 13.8% for high and 18.8% for critical payments.
+
+A note on what changed: in an earlier version a critical payment needed all three modalities and the friction with everything present was 2.6%. Making fingerprint optional and requiring face and voice for high and critical payments raised it to 4.7%, because a missing or unusable face or voice sample (face was not evaluable on about 7% of trials) now sends a high-value payment to extra verification, while a missing fingerprint no longer does.
+
+A second change came from the identity check (see [IDENTITY_VERIFICATION.md](IDENTITY_VERIFICATION.md)): every evaluated modality must now reach its own match line (calibrated score 0.50) at every risk level, so a clear "no match" from one modality cannot be outvoted by a strong score from another. Before, the low and medium bands tolerated a weak modality if the average was high. This raised the friction for genuine users with everything present from 4.7% to 6.8% (a genuine user whose face or voice scores just under their line is now asked for more verification instead of approved), and it removed the 0.1% worst bypass. Policy comparison on simulated attacks, not a measurement of real-world security.
 
 ### What this does and does not show
 
 Does the risk-aware policy improve the security-usability trade-off? The honest answer is "it depends on the comparison":
 
-- **Against the plain fixed threshold: yes, on the attack the baseline is weak against.** The fixed policy averages whatever modalities are present, so an attacker who beat one modality and left the others blank is approved 100% of the time at every risk level. Risk-aware stops this for medium, high and critical transactions. The residual 40% is exactly the low-risk share of the assumed mix, because the low-risk band deliberately accepts a single modality. On the zero-effort impostor and on normal degraded input the two policies are indistinguishable or risk-aware is better (all inputs degraded: FRR 19.7% for fixed against 1.5% for risk-aware, bypass 2.3% against 0.0%), at the price of asking 33% of genuine users for more verification.
-- **Against a static "at least 2 modalities" rule: no clear win.** That rule blocks every omission attack and has less friction when all three modalities are present (0.1% against 2.6%). Risk-aware is only better where that rule is expensive: when a user can offer only one modality, the static rule sends 99% of genuine users to extra verification and the risk-aware policy sends 85%, and for low-risk transactions it lets them through. The price is accepting single-modality attacks on low-risk transactions. So risk-aware is a different point on the curve, not a dominating policy. Whether low-risk single-modality approval is acceptable is a business decision.
+- **Against the plain fixed threshold: yes, on the attack the baseline is weak against.** The fixed policy averages whatever modalities are present, so an attacker who beat one modality and left the others blank is approved 100% of the time at every risk level. Risk-aware stops this for medium, high and critical payments. The residual 40% is exactly the low-risk share of the assumed mix, because the low-risk band deliberately accepts a single modality. On degraded input the risk-aware policy rejects far fewer honest users (FRR 19.7% for fixed against 1.5%), at the price of asking 29% of genuine users for more verification.
+- **Against a static "at least 2 modalities" rule: no clear win.** That rule blocks every omission attack and has less friction when all three modalities are present (0.1% against 6.8%). Risk-aware is only better where that rule is expensive: when a user can offer only one modality, the static rule sends 99% of genuine users to extra verification and the risk-aware policy sends 63%, and for low-risk payments it lets them through. The price is accepting single-modality attacks on low-risk payments. So risk-aware is a different point on the curve, not a dominating policy. Whether low-risk single-modality approval is acceptable is a business decision.
 - The fixed-threshold sweep shows that raising the baseline threshold does not help against omission: even at 0.99 the success rate stays near 88% while 41% of genuine users are blocked.
 - "Additional verification" counts as stopping an attack in these tables. A real attacker could still try to pass the extra step, which is not modelled, so the attack figures for policies with many extra-verification outcomes are optimistic.
 - FAR is 0.00% almost everywhere because the underlying scores separate almost perfectly on these datasets. The intervals (up to 6.8% with the smallest pool of 53 impostor trials) are the real statement about what the data can support. The fusion differences in the FAR column are not meaningful; the omission and friction columns are, because they are determined by the policy rules.
 - The thresholds were not tuned on these results. They are the same experimental values used from the start.
+
+## Liveness checks
+
+Source: `python -m app.evaluation.run_liveness` (stored as a run of kind `liveness`, also in `backend/reports/REPORT.md`). **No spoofing dataset** (CASIA-FASD, Replay-Attack, ASVspoof) could be downloaded, so none of this is a measurement against real presentation attacks.
+
+### Face head-turn check (real detector, real LFW photos, simulated attacks)
+
+250 people, thresholds yaw 0.25, parallax 0.15, step fraction 0.7. The thresholds were chosen from a table of pass rates over a grid of values on the same kind of data, so they are tuned on it, not held out.
+
+| Scenario | Passed |
+|---|---|
+| Flat photo turned about a vertical axis in front of the camera (perspective warp, smooth 10-frame ramp, 4 angles) | 1 of 1000 (0.10%, 95% CI 0.0 to 0.6%) |
+| Two real photos of the owner shown one after the other (frontal then turned the requested way) | 0 of 192 (CI 0 to 2.0%), all stopped by the abrupt-change rule |
+| Real-turn proxy: different photos of one person that differ by a clear turn, parallax test only | 192 of 192 (CI 98.0 to 100%) |
+
+Result codes for the tilt attack: 985 "no head turn", 12 "face lost", 2 "wrong direction", 1 passed.
+
+What this does not show: the "real turn" row uses pairs of stills, so it checks the parallax rule on genuine 3D pose differences but not a smooth real turn through the whole check, and I cannot give a false-reject rate for honest users. The attacks are geometric simulations; a real printed photo has glare, bending and a visible edge, and a screen shows moire, none of which are modelled. A swap with the two photos blended or with intermediate images, a video, or a deepfake is not tested. The check has not been run with a webcam.
+
+### Spoken-word check (real speech, real recognizer, content only)
+
+130 real LibriSpeech utterances from 26 speakers. Challenge words were taken from each utterance's transcript (long words), because I cannot record people saying the project's own vocabulary. "Unrelated recording" means the challenge words are checked against a different speaker's utterance (650 pairs).
+
+| Words required | Said, clean | Said, 10 dB noise | Said, 0 dB noise | Unrelated recording |
+|---|---|---|---|---|
+| 3 of 3 | 78.5% (70.6 to 84.7) | 53.8% (45.3 to 62.2) | 13.1% (8.3 to 19.9) | 0 of 650 (0 to 0.6%) |
+| 2 of 3 | 95.4% (90.3 to 97.9) | 90.8% (84.6 to 94.6) | 48.5% (40.0 to 57.0) | 0 of 650 (0 to 0.6%) |
+
+The first design required all three words, which would have rejected about one honest speaker in five on clean audio and almost half at 10 dB. The default is now 2 of 3. Three random words from the project vocabulary appeared in unrelated speech 0 of 3000 times (CI up to 0.1%). Words in continuous speech are harder to recognise than words said on their own, so isolated challenge words may do better, but I did not measure that. Voice cloning, text-to-speech and replay of recordings that happen to contain the words are not tested.
 
 ## How to reproduce
 
@@ -125,6 +159,7 @@ python -m app.evaluation.run_modality --modality fingerprint --synthetic --max-s
 python -m app.evaluation.run_modality --modality voice --root <LibriSpeech/dev-clean-2> --max-subjects 40 --enroll-samples 3 \
     --genuine-per-subject 5 --impostors-per-subject 8 --splits 10 --degraded-trials 60 --write-calibration
 python -m app.evaluation.run_fusion            # --policy-file other.json to test other thresholds
+python -m app.evaluation.run_liveness --lfw <lfw_funneled> --speech <LibriSpeech/dev-clean-2>   # needs the speech model
 pip install -r requirements-eval.txt && python -m app.evaluation.report
 ```
 
@@ -132,4 +167,4 @@ Datasets I used: LFW funneled (figshare file 5976015) and Mini LibriSpeech dev-c
 
 ## Tests
 
-`pytest` in `backend/` runs 145 tests. Unit and API tests use fake biometric modules for score control. Three integration tests (`-m integration`) run the real face and voice models on small fixtures and skip with a reason if a model is missing. The evaluation code has its own tests (metrics, trial construction without leakage, split separation, determinism, fusion simulation, end-to-end on synthetic fingerprints). Security tests are described in [SECURITY.md](SECURITY.md).
+`pytest` in `backend/` runs 234 tests. Unit and API tests use fake biometric modules for score control. Three integration tests (`-m integration`) run the real face and voice models on small fixtures and skip with a reason if a model is missing. The evaluation code has its own tests (metrics, trial construction without leakage, split separation, determinism, fusion simulation, end-to-end on synthetic fingerprints). Security tests are described in [SECURITY.md](SECURITY.md).

@@ -50,19 +50,19 @@ Assumed risk mix: {'low': 0.4, 'medium': 0.3, 'high': 0.2, 'critical': 0.1}. All
 |---|---|---|---|---|---|---|
 | all available modalities | fixed | 0.00% (0.0% to 6.8%) | 0.06% (0.0% to 6.8%) | 0.0% | 0.1% | 100.0% |
 | all available modalities | fixed + min 2 modalities | 0.00% (0.0% to 6.8%) | 0.06% (0.0% to 6.8%) | 0.1% | 0.0% | 0.0% |
-| all available modalities | risk-aware | 0.00% (0.0% to 6.8%) | 0.00% (0.0% to 6.8%) | 2.6% | 0.1% | 40.0% |
+| all available modalities | risk-aware | 0.00% (0.0% to 6.8%) | 0.00% (0.0% to 6.8%) | 6.8% | 0.0% | 40.0% |
 | face missing | fixed | 0.00% (0.0% to 6.8%) | 1.72% (0.3% to 9.9%) | 0.0% | 2.0% | 100.0% |
 | face missing | fixed + min 2 modalities | 0.00% (0.0% to 6.8%) | 1.72% (0.3% to 9.9%) | 1.7% | 0.0% | 0.0% |
-| face missing | risk-aware | 0.00% (0.0% to 6.8%) | 0.00% (0.0% to 6.8%) | 12.4% | 0.9% | 40.0% |
+| face missing | risk-aware | 0.00% (0.0% to 6.8%) | 0.00% (0.0% to 6.8%) | 32.8% | 0.9% | 40.0% |
 | fingerprint missing | fixed | 0.00% (0.0% to 6.8%) | 3.32% (1.0% to 12.8%) | 0.2% | 5.2% | 91.2% |
 | fingerprint missing | fixed + min 2 modalities | 0.00% (0.0% to 6.8%) | 3.32% (1.0% to 12.8%) | 10.3% | 0.7% | 0.0% |
-| fingerprint missing | risk-aware | 0.00% (0.0% to 6.8%) | 0.14% (0.0% to 6.8%) | 22.0% | 3.6% | 38.0% |
+| fingerprint missing | risk-aware | 0.00% (0.0% to 6.8%) | 0.14% (0.0% to 6.8%) | 10.8% | 2.6% | 38.0% |
 | voice missing | fixed | 0.00% (0.0% to 2.5%) | 0.34% (0.1% to 3.7%) | 0.0% | 6.0% | 100.0% |
 | voice missing | fixed + min 2 modalities | 0.00% (0.0% to 2.5%) | 0.34% (0.1% to 3.7%) | 9.1% | 0.7% | 0.0% |
-| voice missing | risk-aware | 0.00% (0.0% to 2.5%) | 0.00% (0.0% to 2.5%) | 19.3% | 3.3% | 40.0% |
+| voice missing | risk-aware | 0.00% (0.0% to 2.5%) | 0.00% (0.0% to 2.5%) | 33.2% | 2.4% | 40.0% |
 | only face | fixed | 0.00% (0.0% to 1.3%) | 0.64% (0.2% to 2.5%) | 8.3% | 90.1% | n/a |
 | only face | fixed + min 2 modalities | 0.00% (0.0% to 1.3%) | 0.64% (0.2% to 2.5%) | 99.4% | 0.0% | n/a |
-| only face | risk-aware | 0.00% (0.0% to 1.3%) | 0.36% (0.1% to 2.0%) | 85.0% | 14.5% | n/a |
+| only face | risk-aware | 0.00% (0.0% to 1.3%) | 0.36% (0.1% to 2.0%) | 63.2% | 36.4% | n/a |
 | only fingerprint | fixed | 0.00% (0.0% to 2.5%) | 0.00% (0.0% to 2.5%) | 0.0% | 100.0% | n/a |
 | only fingerprint | fixed + min 2 modalities | 0.00% (0.0% to 2.5%) | 0.00% (0.0% to 2.5%) | 100.0% | 0.0% | n/a |
 | only fingerprint | risk-aware | 0.00% (0.0% to 2.5%) | 0.00% (0.0% to 2.5%) | 60.0% | 40.0% | n/a |
@@ -71,7 +71,7 @@ Assumed risk mix: {'low': 0.4, 'medium': 0.3, 'high': 0.2, 'critical': 0.1}. All
 | only voice | risk-aware | 0.00% (0.0% to 6.8%) | 1.13% (0.3% to 9.9%) | 61.4% | 37.3% | n/a |
 | all modalities degraded | fixed | 0.00% (0.0% to 12.1%) | 19.67% (10.2% to 39.5%) | 0.2% | 2.3% | 73.3% |
 | all modalities degraded | fixed + min 2 modalities | 0.00% (0.0% to 12.1%) | 19.67% (10.2% to 39.5%) | 4.1% | 0.0% | 0.0% |
-| all modalities degraded | risk-aware | 0.00% (0.0% to 12.1%) | 1.46% (0.0% to 12.1%) | 33.1% | 0.0% | 3.4% |
+| all modalities degraded | risk-aware | 0.00% (0.0% to 12.1%) | 1.46% (0.0% to 12.1%) | 38.6% | 0.9% | 31.9% |
 
 ![conditions](fusion_conditions.png)
 
@@ -83,13 +83,13 @@ Assumed risk mix: {'low': 0.4, 'medium': 0.3, 'high': 0.2, 'critical': 0.1}. All
 |---|---|---|---|---|---|---|
 | low | fixed | 0.00% | 0.00% | 0.0% | 0.1% | 100.0% |
 | low | fixed + min 2 modalities | 0.00% | 0.00% | 0.1% | 0.0% | 0.0% |
-| low | risk-aware | 0.00% | 0.00% | 0.0% | 0.3% | 100.0% |
+| low | risk-aware | 0.00% | 0.00% | 2.7% | 0.1% | 100.0% |
 | medium | fixed | 0.00% | 0.00% | 0.0% | 0.0% | 100.0% |
 | medium | fixed + min 2 modalities | 0.00% | 0.00% | 0.1% | 0.0% | 0.0% |
-| medium | risk-aware | 0.00% | 0.00% | 0.1% | 0.0% | 0.0% |
+| medium | risk-aware | 0.00% | 0.00% | 3.7% | 0.0% | 0.0% |
 | high | fixed | 0.00% | 0.20% | 0.0% | 0.0% | 100.0% |
 | high | fixed + min 2 modalities | 0.00% | 0.20% | 0.1% | 0.0% | 0.0% |
-| high | risk-aware | 0.00% | 0.00% | 3.5% | 0.0% | 0.0% |
+| high | risk-aware | 0.00% | 0.00% | 13.8% | 0.0% | 0.0% |
 | critical | fixed | 0.00% | 0.20% | 0.0% | 0.1% | 100.0% |
 | critical | fixed + min 2 modalities | 0.00% | 0.20% | 0.1% | 0.0% | 0.0% |
 | critical | risk-aware | 0.00% | 0.00% | 18.8% | 0.0% | 0.0% |
@@ -110,31 +110,58 @@ Decision thresholds used:
    "reject": 0.3,
    "min_modalities": 1,
    "min_coverage": 0.3,
-   "conflict_floor": 0.0
+   "conflict_floor": 0.5,
+   "require_core": false
   },
   "medium": {
    "approve": 0.7,
    "reject": 0.35,
    "min_modalities": 2,
    "min_coverage": 0.5,
-   "conflict_floor": 0.15
+   "conflict_floor": 0.5,
+   "require_core": false
   },
   "high": {
    "approve": 0.8,
    "reject": 0.4,
    "min_modalities": 2,
    "min_coverage": 0.6,
-   "conflict_floor": 0.25
+   "conflict_floor": 0.5,
+   "require_core": true
   },
   "critical": {
    "approve": 0.88,
    "reject": 0.45,
-   "min_modalities": 3,
+   "min_modalities": 2,
    "min_coverage": 0.7,
-   "conflict_floor": 0.35
+   "conflict_floor": 0.5,
+   "require_core": true
   }
  }
 }
 ```
 
 Reproduce: `/home/uravity/trilock/backend/app/evaluation/run_fusion.py` (seed 7).
+
+## Liveness checks
+
+No spoofing dataset was available. Face attacks are SIMULATED from LFW stills; voice uses real speech but only tests the content check. See docs/EVALUATION.md for what this does and does not show.
+
+Face head-turn check, 250 LFW people, thresholds {'yaw_min': 0.25, 'parallax_min': 0.15, 'max_step_fraction': 0.7}:
+
+| Scenario | Passed |
+|---|---|
+| Flat photo tilted in front of the camera (simulated, smooth ramp) | 1/1000 = 0.10% (0.0% to 0.6%) |
+| Two real photos shown one after the other (frontal then turned) | 0/192 = 0.00% (0.0% to 2.0%) |
+| Real-turn proxy: different photos of one person, parallax test only | 192/192 = 100.00% (98.0% to 100.0%) |
+
+Result codes for the tilt attack: {'no_head_turn': 985, 'wrong_direction': 2, 'face_lost': 12, 'passed': 1}. For the swap attack: {'abrupt_change': 192}.
+
+Spoken-word check, 130 real utterances from 26 speakers (challenge words taken from each transcript):
+
+| Required words | Said, clean | Said, 10 dB noise | Said, 0 dB noise | Unrelated recording |
+|---|---|---|---|---|
+| 3 of 3 | 102/130 = 78.46% (70.6% to 84.7%) | 70/130 = 53.85% (45.3% to 62.2%) | 17/130 = 13.08% (8.3% to 19.9%) | 0/650 = 0.00% (0.0% to 0.6%) |
+| 2 of 3 | 124/130 = 95.38% (90.3% to 97.9%) | 118/130 = 90.77% (84.6% to 94.6%) | 63/130 = 48.46% (40.0% to 57.0%) | 0/650 = 0.00% (0.0% to 0.6%) |
+
+Chance that unrelated speech contains three random words of the project vocabulary: 0/3000 = 0.00% (0.0% to 0.1%).

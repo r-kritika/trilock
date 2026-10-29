@@ -6,18 +6,22 @@ No real money, bank or customer data is involved, and it is not a production aut
 
 ## What it does
 
-1. Register a test account, sign in, and enroll face, voice and fingerprint references (re-entering the password to confirm each change).
-2. Fill in a simulated transaction. A rule-based risk engine scores it (amount, new recipient, international, new device, unusual amount for this user).
-3. Submit whichever biometric samples you have. Each module verifies independently and returns a score, an input-quality estimate, or a reason why the input could not be evaluated.
-4. Two fusion policies decide on the same evidence: a fixed-threshold baseline and the risk-aware policy. The risk-aware one is applied by default, and both results are stored and shown side by side.
-5. Everything is persisted in SQLite: users, enrollments, transactions, each attempt, and an audit log. Dashboard, history and analytics read from that data.
-6. Users see only their own records. An administrator account (created from the command line) can read everything but cannot enroll, transact or decide for anyone. Details in [docs/SECURITY.md](docs/SECURITY.md).
+1. Register a test account. Its first sign-in is *limited* to the enrollment pages. Enroll **face and voice** (required) with your password; fingerprint is optional and not needed for anything. Once both are enrolled the rest of the app unlocks.
+2. From then on, signing in takes your password **and** your live face and voice (see below).
+3. Fill in a simulated transaction. A rule-based risk engine scores it: amount, new recipient, international, new device, unusual amount for this user, and **time-aware factors** (several payments within minutes, a high 24 hour total, an unusual hour for this user, a brand-new or long-dormant account, biometrics changed recently).
+4. Submit whichever biometric samples you have. Each module verifies independently and returns a score, an input-quality estimate, or a reason why the input could not be evaluated.
+5. Two fusion policies decide on the same evidence: a fixed-threshold baseline and the risk-aware policy. The risk-aware one is applied by default, and both results are stored and shown side by side.
+6. Everything is persisted in SQLite: users, enrollments, transactions, each attempt, and an audit log. Dashboard, history and analytics read from that data.
+7. **Signing in:** the password opens nothing by itself once face and voice are enrolled. The second step is a live head turn and three spoken words; both the face and the voice must pass liveness and match the enrolled references. Administrators use the password only. `TRILOCK_LOGIN_BIOMETRICS=off` switches this off for machines without a camera, microphone or recognizer.
+8. For high and critical transactions the face must be a **live head turn** and the voice must **say three random words**; a still photo or free recording is not accepted for those two. A failed live check blocks approval on that attempt. See "What liveness does not stop" in [docs/SECURITY.md](docs/SECURITY.md).
+9. Failed attempts are locked out per device and network, not per account, so an attacker cannot lock the owner out. If a user can no longer provide their biometrics there is a recovery request (waiting period, admin approval, probation) instead of an instant admin reset.
+10. Users see only their own records. An administrator account (created from the command line) can read everything but cannot enroll, transact or decide for anyone. Details in [docs/SECURITY.md](docs/SECURITY.md).
 
 | Modality | Method | Needs |
 |---|---|---|
-| Face | YuNet detector + SFace embedding (OpenCV), cosine similarity | two ONNX files (about 39 MB) |
-| Voice | SpeechBrain ECAPA-TDNN speaker embedding, cosine similarity | torch, speechbrain, about 80 MB download |
-| Fingerprint | SIFT keypoints + RANSAC inlier count on fingerprint **images** (experimental) | nothing extra, but no scanner access |
+| Face | YuNet detector + SFace embedding (OpenCV), cosine similarity; head-turn liveness challenge from landmarks | two ONNX files (about 39 MB) |
+| Voice | SpeechBrain ECAPA-TDNN speaker embedding, cosine similarity; spoken-word challenge with faster-whisper tiny.en | torch, speechbrain, faster-whisper, about 155 MB of downloads |
+| Fingerprint | **Optional, future enhancement.** SIFT keypoints + RANSAC inlier count on fingerprint **images** (experimental) | nothing extra, but no scanner access |
 
 ## Architecture
 
@@ -30,7 +34,7 @@ frontend (React + Vite)  --/api-->  backend (FastAPI)
                                       SQLite + encrypted template files in backend/data
 ```
 
-More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), the algorithms in [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md), the evaluation protocol, audit and results in [docs/EVALUATION.md](docs/EVALUATION.md), and authentication, privacy and known gaps in [docs/SECURITY.md](docs/SECURITY.md).
+More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), the algorithms in [docs/IMPLEMENTATION.md](docs/IMPLEMENTATION.md), the evaluation protocol, audit and results in [docs/EVALUATION.md](docs/EVALUATION.md), authentication, privacy and known gaps in [docs/SECURITY.md](docs/SECURITY.md), and how identity verification was checked in [docs/IDENTITY_VERIFICATION.md](docs/IDENTITY_VERIFICATION.md).
 
 ## Prerequisites
 
@@ -76,9 +80,9 @@ cd frontend && npm run dev
 
 Open http://localhost:5173. API docs are at http://localhost:8000/docs.
 
-A first walk-through: open the app and register an account (password of at least 10 characters). On Enrollment, type your password in the confirmation box, then enroll a face (camera or photo) and a voice recording. For the fingerprint use an image file; `python -m app.evaluation.make_demo_fingerprints` writes a few **synthetic** demo prints to `backend/data/demo/` if you have no dataset. Then New transaction: try a small payment with only a face, then a large payment to a new recipient with the same face only, and compare the two policies on the result page.
+A first walk-through: open the app and register an account (password of at least 10 characters). You land on Enrollment with a limited session. Type your password in the confirmation box, then enroll a face (camera or photo). Your very first enrollment needs only the password. After that, every change (adding voice, replacing the face, erasing the account) also needs fresh matching samples from your already-enrolled modalities, entered in the "Prove it is you" panel, so a stolen password alone cannot swap in someone else's face. For the fingerprint use an image file; `python -m app.evaluation.make_demo_fingerprints` writes a few **synthetic** demo prints to `backend/data/demo/` if you have no dataset. Enroll the voice too (it needs the face as proof), and the app unlocks. Fingerprint is optional. Then New transaction: try a small payment with only a face, then a large payment to a new recipient with the same face only, and compare the two policies on the result page.
 
-Administrator (read-only overview of all accounts, transactions and analytics):
+Administrator (read-only overview of all accounts, transactions and analytics, plus the queue of biometric recovery requests, which can be approved only after the waiting period):
 
 ```bash
 cd backend && .venv/bin/python -m app.cli create-admin --email admin@example.com --name "Admin"
@@ -90,7 +94,7 @@ Data tools: `python -m app.cli purge --days 30` (retention) and `python -m app.c
 
 ```bash
 cd backend
-.venv/bin/python -m pytest                      # 145 tests; most need no models
+.venv/bin/python -m pytest                      # 234 tests; most need no models
 .venv/bin/python -m pytest -m integration -rs   # real-model tests on small fixtures
 ```
 
@@ -117,6 +121,11 @@ Results are stored in the database (Analytics page) and written to `backend/repo
 | Sign-in says "account locked" | 5 wrong passwords lock it for 15 minutes. Wait, or clear `locked_until` in the database. |
 | "Too many failed biometric attempts" (429) | 5 failed biometric tries in 15 minutes pause further tries for that user. |
 | "Enter your account password" on enroll | Type the password in the confirmation box at the top of the Enrollment page. |
+| "Changing biometrics needs a matching sample" | The account already has biometrics. Provide fresh samples in the "Prove it is you" panel. If you cannot, use "Request recovery" on the Enrollment page (24 hour wait, admin approval). |
+| Sign-in stuck on the face and voice step | The camera, microphone and speech recognizer must work (see "Spoken challenge unavailable" below), and the head turn needs a real moving face. For a machine without them set `TRILOCK_LOGIN_BIOMETRICS=off`, or use "Cannot verify? Recovery". |
+| "Too many failed sign-ins from here" | Counted per device and network, not per account. Your own known browser has a higher allowance. Wait 15 minutes. |
+| High-risk transaction says "needs a live head-turn challenge" | Use the camera (not an upload) and answer the instruction; say the three words shown. |
+| Spoken challenge unavailable | `pip install -r requirements-ml.txt` and `python scripts/download_models.py` (downloads the 75 MB recognizer). |
 | Old database after an update | New columns are added automatically. Accounts made before login existed have no password; register again. |
 | Dashboard says Face "Unavailable" | Model files missing in `backend/models`. Run `scripts/download_models.py`. |
 | Voice "Unavailable: dependencies are missing (torch)" | Install the voice stack (see Setup). |

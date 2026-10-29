@@ -171,6 +171,30 @@ def main() -> None:
                          f"{pc(o['worst_bypass_asr'], 1)} | {pc(o.get('worst_omission_asr'), 1)} |")
         L += ["", "Decision thresholds used:", "", "```json", json.dumps(m["fusion_config"], indent=1), "```", "",
               f"Reproduce: `{m['reproducibility']['command']}` (seed {m['reproducibility']['seed']}).", ""]
+    live = latest(runs, "liveness")
+    if live:
+        m = live[0].metrics
+        L += ["## Liveness checks", "",
+              "No spoofing dataset was available. Face attacks are SIMULATED from LFW stills; voice uses real speech but only tests the "
+              "content check. See docs/EVALUATION.md for what this does and does not show.", ""]
+        if "face" in m:
+            f = m["face"]
+            r = lambda d: f"{d['k']}/{d['n']} = {pc(d['rate'])} ({pc(d['ci95'][0], 1)} to {pc(d['ci95'][1], 1)})"
+            L += [f"Face head-turn check, {f['people']} LFW people, thresholds {f['thresholds']}:", "",
+                  "| Scenario | Passed |", "|---|---|",
+                  f"| Flat photo tilted in front of the camera (simulated, smooth ramp) | {r(f['flat_photo_tilt_attack_passes'])} |",
+                  f"| Two real photos shown one after the other (frontal then turned) | {r(f['photo_swap_attack_passes'])} |",
+                  f"| Real-turn proxy: different photos of one person, parallax test only | {r(f['real_turn_proxy_parallax_pass'])} |", "",
+                  f"Result codes for the tilt attack: {f['flat_photo_result_codes']}. For the swap attack: {f['photo_swap_result_codes']}.", ""]
+        if "voice" in m:
+            v = m["voice"]
+            r = lambda d: f"{d['k']}/{d['n']} = {pc(d['rate'])} ({pc(d['ci95'][0], 1)} to {pc(d['ci95'][1], 1)})"
+            L += [f"Spoken-word check, {v['utterances']} real utterances from {v['speakers']} speakers (challenge words taken from each transcript):", "",
+                  "| Required words | Said, clean | Said, 10 dB noise | Said, 0 dB noise | Unrelated recording |", "|---|---|---|---|---|"]
+            for need in (3, 2):
+                s_ = v[f"said_words_pass_{need}of3"]
+                L.append(f"| {need} of 3 | {r(s_['clean'])} | {r(s_['n10'])} | {r(s_['n0'])} | {r(v[f'unrelated_audio_pass_{need}of3'])} |")
+            L += ["", f"Chance that unrelated speech contains three random words of the project vocabulary: {r(v['project_vocabulary_chance_pass_3of3'])}.", ""]
     (a.out / "REPORT.md").write_text("\n".join(L))
     print(f"wrote {a.out / 'REPORT.md'} and plots")
 

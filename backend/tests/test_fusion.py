@@ -35,7 +35,7 @@ def test_fixed_missing_modality_not_counted_as_match():
     # one modality at 0.9, others missing: average only over what exists, never over invented 1.0s
     o = fixed_threshold_fusion(trio(.9, None, None), "low")
     assert o.usable == ["face"] and o.fused_score == pytest.approx(.9)
-    assert o.coverage == pytest.approx(1 / 3, abs=1e-3)
+    assert o.coverage == pytest.approx(0.5, abs=1e-3)       # one of the two core modalities
 
 
 def test_fixed_nothing_evaluable_asks_for_more():
@@ -56,8 +56,9 @@ def test_risk_aware_high_risk_single_modality_needs_more_evidence():
     assert fixed_threshold_fusion(trio(.99, None, None), "high").decision == Decision.APPROVED
 
 
-def test_risk_aware_critical_needs_all_three():
-    assert risk_aware_fusion(trio(.97, .95, None), "critical").decision == Decision.ADDITIONAL
+def test_risk_aware_critical_needs_face_and_voice_and_fingerprint_is_optional():
+    assert risk_aware_fusion(trio(.97, .95, None), "critical").decision == Decision.ADDITIONAL      # voice missing, fingerprint cannot stand in
+    assert risk_aware_fusion(trio(.97, None, .96), "critical").decision == Decision.APPROVED        # face + voice are enough
     assert risk_aware_fusion(trio(.97, .95, .96), "critical").decision == Decision.APPROVED
 
 
@@ -77,14 +78,14 @@ def test_risk_aware_clear_mismatch_rejects():
 def test_risk_aware_conflicting_modality_blocks_approval():
     o = risk_aware_fusion(trio(.99, .99, .14), "medium")
     assert o.fused_score >= .70
-    assert o.decision == Decision.ADDITIONAL and any("conflict floor" in u for u in o.unmet)
+    assert o.decision == Decision.ADDITIONAL and any("did not match" in u for u in o.unmet)
 
 
 def test_risk_aware_low_quality_lowers_reliability_and_coverage():
     good = risk_aware_fusion(trio(.9, .9, .9, q=1.0), "high")
     poor = risk_aware_fusion(trio(.9, .9, .9, q=0.0), "high")
     assert good.coverage > poor.coverage
-    assert good.coverage == pytest.approx(1.0) and poor.coverage == pytest.approx(0.4)
+    assert good.coverage == pytest.approx(1.0) and poor.coverage == pytest.approx(0.6)   # 3 x 0.4 over the core weight 2, capped at 1
 
 
 def test_poor_quality_weights_shift_fused_score_toward_reliable_modality():
@@ -151,3 +152,63 @@ def test_fixed_policy_is_exposed_to_omission_risk_aware_is_not():
     attack = trio(.97, None, None)
     assert fixed_threshold_fusion(attack, "high").decision == Decision.APPROVED
     assert risk_aware_fusion(attack, "high").decision == Decision.ADDITIONAL
+
+
+
+# ---- fingerprint is optional; face and voice are the core ----
+def test_missing_fingerprint_never_lowers_coverage_or_asks_for_more():
+    with_fp = risk_aware_fusion(trio(.95, .95, .95), "critical")
+    without = risk_aware_fusion(trio(.95, None, .95), "critical")
+    assert without.decision == with_fp.decision == Decision.APPROVED
+    assert without.coverage == pytest.approx(0.94, abs=0.01)           # the core alone is not penalised for the absent fingerprint
+    assert with_fp.coverage >= without.coverage and with_fp.coverage <= 1.0   # adding it can only help, capped at 1
+    assert not any("fingerprint" in u for u in without.unmet)
+
+
+def test_fingerprint_cannot_replace_face_or_voice_for_high_value_payments():
+    for cat in ("high", "critical"):
+        o = risk_aware_fusion(trio(.99, .99, None), cat)
+        assert o.decision == Decision.ADDITIONAL and any("voice" in u for u in o.unmet), cat
+        o = risk_aware_fusion(trio(None, .99, .99), cat)
+        assert o.decision == Decision.ADDITIONAL and any("face" in u for u in o.unmet), cat
+    # for lower risk any two modalities are fine, so the optional one can still help there
+    assert risk_aware_fusion(trio(.9, .9, None), "medium").decision == Decision.APPROVED
+
+
+def test_fingerprint_only_adds_evidence_when_it_is_present():
+    weak_fp = risk_aware_fusion(trio(.9, .2, .9), "medium")             # optional modality disagrees
+    no_fp = risk_aware_fusion(trio(.9, None, .9), "medium")
+    assert weak_fp.fused_score < no_fp.fused_score                     # present evidence counts, for and against
+
+
+def test_core_modalities_are_configurable():
+    cfg = FusionConfig(core_modalities=["face"])
+    o = risk_aware_fusion(trio(.97, None, None), "low", cfg)
+    assert o.coverage == pytest.approx(0.94, abs=0.01)
+
+
+
+# ---- every evaluated modality must itself match: a "no match" is never outvoted ----
+@pytest.mark.parametrize("cat", ["low", "medium", "high", "critical"])
+def test_a_borderline_no_match_cannot_be_outvoted_at_any_risk(cat):
+    """Face 0.99 plus a voice that says no match (0.45) fuses to 0.72, which used to pass at low and medium risk."""
+    o = risk_aware_fusion(trio(.99, None, .45), cat)
+    assert o.fused_score >= 0.70                      # the averaged score alone would have been enough at low and medium
+    assert o.decision == Decision.ADDITIONAL and any("voice did not match" in u for u in o.unmet)
+
+
+@pytest.mark.parametrize("cat", ["low", "medium", "high", "critical"])
+def test_any_single_no_match_blocks_approval_whichever_modality_it_is(cat):
+    for results in (trio(.45, None, .99), trio(.99, .45, .99), trio(.99, .99, .49)):
+        assert risk_aware_fusion(results, cat).decision != Decision.APPROVED
+
+
+def test_unusable_input_is_not_a_no_match_and_a_clear_mismatch_is_still_rejected():
+    # a modality that could not be evaluated is no evidence (not a veto): low risk still approves on the other one
+    assert risk_aware_fusion(trio(.97, None, None), "low").decision == Decision.APPROVED
+    # a clear impostor on every modality is rejected, not merely held
+    assert risk_aware_fusion(trio(.02, .03, .01), "critical").decision == Decision.REJECTED
+
+
+def test_a_modality_exactly_at_its_match_line_counts_as_a_match():
+    assert risk_aware_fusion(trio(.99, None, .50), "low").decision == Decision.APPROVED

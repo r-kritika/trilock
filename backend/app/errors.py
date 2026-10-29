@@ -11,8 +11,8 @@ log = logging.getLogger("trilock")
 
 
 class ApiError(Exception):
-    def __init__(self, status: int, code: str, message: str):
-        self.status, self.code, self.message = status, code, message
+    def __init__(self, status: int, code: str, message: str, details=None):
+        self.status, self.code, self.message, self.details = status, code, message, details
 
 
 def _body(code: str, message: str, extra=None) -> dict:
@@ -25,7 +25,10 @@ def _body(code: str, message: str, extra=None) -> dict:
 def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(ApiError)
     async def _api(_: Request, e: ApiError):
-        return JSONResponse(_body(e.code, e.message), status_code=e.status)
+        body = _body(e.code, e.message)
+        if e.details is not None:
+            body["error"]["details"] = e.details
+        return JSONResponse(body, status_code=e.status)
 
     @app.exception_handler(StarletteHTTPException)
     async def _http(_: Request, e: StarletteHTTPException):

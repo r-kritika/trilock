@@ -1,0 +1,12 @@
+{
+ "face": {
+  "center": 0.3884,
+  "scale": 0.0578,
+  "source": "data/datasets/lfw/lfw_funneled (calibration half, seed 1, trial manifest 93523105cb1d5c04)"
+ },
+ "voice": {
+  "center": 0.4542,
+  "scale": 0.0628,
+  "source": "data/datasets/librispeech/LibriSpeech/dev-clean-2 (calibration half, seed 1, trial manifest 07ae76dc048f494a)"
+ }
+}

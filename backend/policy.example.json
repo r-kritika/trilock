@@ -1,12 +1,13 @@
 {
   "fusion": {
     "fixed_threshold": 0.70,
+    "core_modalities": ["face", "voice"],
     "weights": {"face": 1.0, "fingerprint": 1.0, "voice": 1.0},
     "bands": {
-      "low":      {"approve": 0.60, "reject": 0.30, "min_modalities": 1, "min_coverage": 0.30, "conflict_floor": 0.00},
-      "medium":   {"approve": 0.70, "reject": 0.35, "min_modalities": 2, "min_coverage": 0.50, "conflict_floor": 0.15},
-      "high":     {"approve": 0.80, "reject": 0.40, "min_modalities": 2, "min_coverage": 0.60, "conflict_floor": 0.25},
-      "critical": {"approve": 0.88, "reject": 0.45, "min_modalities": 3, "min_coverage": 0.70, "conflict_floor": 0.35}
+      "low":      {"approve": 0.60, "reject": 0.30, "min_modalities": 1, "min_coverage": 0.30, "conflict_floor": 0.50, "require_core": false},
+      "medium":   {"approve": 0.70, "reject": 0.35, "min_modalities": 2, "min_coverage": 0.50, "conflict_floor": 0.50, "require_core": false},
+      "high":     {"approve": 0.80, "reject": 0.40, "min_modalities": 2, "min_coverage": 0.60, "conflict_floor": 0.50, "require_core": true},
+      "critical": {"approve": 0.88, "reject": 0.45, "min_modalities": 2, "min_coverage": 0.70, "conflict_floor": 0.50, "require_core": true}
     }
   },
   "risk": {

@@ -32,6 +32,31 @@ class RiskConfig:
     history_min_transactions: int = 3
     history_multiple: float = 3.0
     history_points: float = 12
+    # --- time-aware factors (all rule-based; they need the user's history, see authentication.build_risk_input) ---
+    # many payments in a short time: (earlier payments inside the window, points), the highest match applies
+    velocity_window_minutes: int = 10
+    velocity_points: list[tuple[int, float]] = field(default_factory=lambda: [(2, 10), (4, 20)])
+    # money leaving over 24 hours, this payment included
+    daily_total_threshold: float = 10000
+    daily_total_points: float = 10
+    # unusual hour. With a learned profile (enough approved history) the hour must be within this many hours of the
+    # user's typical hour; without one a fixed night window is used.
+    usual_hour_min_history: int = 5
+    usual_hour_max_deviation: float = 6.0
+    usual_hour_points: float = 8
+    night_start_hour: int = 0
+    night_end_hour: int = 5          # exclusive: 00:00 to 04:59
+    night_points: float = 8
+    # a very new account moving real money, or a long-dormant one suddenly active
+    new_account_hours: float = 24
+    new_account_min_amount: float = 1000
+    new_account_points: float = 10
+    dormant_days: float = 60
+    dormant_min_amount: float = 1000
+    dormant_points: float = 8
+    # biometrics were added, replaced or removed on an account that already had some
+    recent_biometric_change_hours: float = 24
+    recent_biometric_change_points: float = 12
     # category lower bounds (score >= bound -> category)
     medium_from: float = 25
     high_from: float = 50
@@ -47,6 +72,14 @@ class RiskInput:
     new_device: bool = False
     history_count: int = 0          # approved transactions by this user so far
     history_mean_amount: float = 0.0
+    # time-related inputs (None / 0 = unknown, no factor)
+    local_hour: int | None = None               # hour of day 0-23 where the user is, sent by the client
+    recent_count: int = 0                       # this user's earlier payments inside the velocity window
+    amount_24h: float = 0.0                     # total of this user's earlier payments in the last 24 h
+    account_age_hours: float | None = None
+    hours_since_last_txn: float | None = None
+    typical_hour: float | None = None           # learned from approved history (circular mean), if any
+    biometric_changed_hours_ago: float | None = None
 
 
 @dataclass
@@ -86,6 +119,40 @@ def categorize(score: float, cfg: RiskConfig) -> RiskCategory:
     return RiskCategory.LOW
 
 
+def circular_gap(a: float, b: float) -> float:
+    d = abs(a - b) % 24
+    return min(d, 24 - d)
+
+
+def _time_factors(inp: RiskInput, cfg: RiskConfig) -> list[RiskFactor]:
+    out: list[RiskFactor] = []
+    pts = [p for n, p in cfg.velocity_points if inp.recent_count >= n]
+    if pts:
+        out.append(RiskFactor("velocity", max(pts), f"{inp.recent_count + 1} payments within {cfg.velocity_window_minutes} minutes"))
+    if inp.amount_24h > 0 and inp.amount_24h + inp.amount >= cfg.daily_total_threshold:
+        out.append(RiskFactor("daily_total", cfg.daily_total_points,
+                              f"{inp.amount_24h + inp.amount:,.0f} USD moving out within 24 hours"))
+    if inp.local_hour is not None:
+        if inp.typical_hour is not None:
+            if circular_gap(inp.local_hour, inp.typical_hour) > cfg.usual_hour_max_deviation:
+                out.append(RiskFactor("unusual_hour", cfg.usual_hour_points,
+                                      f"{inp.local_hour:02d}:00 is far from this user's usual hours (around {inp.typical_hour:.0f}:00)"))
+        elif cfg.night_start_hour <= inp.local_hour < cfg.night_end_hour:
+            out.append(RiskFactor("night_hour", cfg.night_points, f"Night-time payment ({inp.local_hour:02d}:00)"))
+    if (inp.account_age_hours is not None and inp.account_age_hours < cfg.new_account_hours
+            and inp.amount >= cfg.new_account_min_amount):
+        out.append(RiskFactor("new_account", cfg.new_account_points, f"Account is only {inp.account_age_hours:.0f} hours old"))
+    if (inp.hours_since_last_txn is not None and inp.hours_since_last_txn > cfg.dormant_days * 24
+            and inp.amount >= cfg.dormant_min_amount):
+        out.append(RiskFactor("dormant_account", cfg.dormant_points,
+                              f"First payment in {inp.hours_since_last_txn / 24:.0f} days"))
+    if (inp.biometric_changed_hours_ago is not None
+            and inp.biometric_changed_hours_ago < cfg.recent_biometric_change_hours):
+        out.append(RiskFactor("recent_biometric_change", cfg.recent_biometric_change_points,
+                              f"Biometrics were changed {inp.biometric_changed_hours_ago:.0f} hours ago"))
+    return out
+
+
 def assess_risk(inp: RiskInput, cfg: RiskConfig | None = None) -> RiskAssessment:
     cfg = cfg or RiskConfig()
     if inp.amount < 0:
@@ -111,6 +178,8 @@ def assess_risk(inp: RiskInput, cfg: RiskConfig | None = None) -> RiskAssessment
         factors.append(RiskFactor(
             "unusual_amount", cfg.history_points,
             f"Amount is more than {cfg.history_multiple:g}x this user's average of {inp.history_mean_amount:,.2f}"))
+
+    factors += _time_factors(inp, cfg)
 
     score = round(min(100.0, sum(f.points for f in factors)), 2)
     return RiskAssessment(score=score, category=categorize(score, cfg), factors=factors)

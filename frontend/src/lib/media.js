@@ -13,48 +13,72 @@ export function describeMediaError(e) {
 }
 
 // ---- camera -------------------------------------------------------------
+// `videoRef` is a callback ref: the stream is attached whenever the <video> element mounts, and `ready` turns true
+// only once the element really has a picture, so the UI can keep Capture disabled until then.
 export function useCamera() {
-  const videoRef = useRef(null)
+  const elRef = useRef(null)
   const streamRef = useRef(null)
-  const [state, setState] = useState({ active: false, error: null })
+  const [state, setState] = useState({ active: false, ready: false, starting: false, error: null })
+
+  const attach = useCallback((el) => {
+    elRef.current = el
+    if (el && streamRef.current) {
+      el.srcObject = streamRef.current
+      el.onloadeddata = () => setState((s) => ({ ...s, ready: true }))
+      el.play().catch(() => {})
+    }
+  }, [])
 
   const stop = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
     streamRef.current = null
-    setState((s) => ({ ...s, active: false }))
+    setState({ active: false, ready: false, starting: false, error: null })
   }, [])
 
   const start = useCallback(async () => {
+    setState({ active: false, ready: false, starting: true, error: null })
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error('unsupported')
       const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } })
       streamRef.current = stream
-      setState({ active: true, error: null })
-      // video element is rendered once active; attach in an effect-safe way
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current.play().catch(() => {})
-        }
-      })
+      attach(elRef.current)       // the <video> is already mounted while "starting", so attach the stream now
+      setState({ active: true, ready: false, starting: false, error: null })
     } catch (e) {
-      setState({ active: false, error: describeMediaError(e) })
+      setState({ active: false, ready: false, starting: false, error: describeMediaError(e) })
     }
-  }, [])
+  }, [attach])
 
   useEffect(() => () => streamRef.current?.getTracks().forEach((t) => t.stop()), [])
 
-  const snapshot = useCallback(() => new Promise((resolve) => {
-    const v = videoRef.current
-    if (!v || !v.videoWidth) return resolve(null)
+  // Waits up to ~3 s for a first frame, then grabs it. Resolves null if the camera never produced a picture.
+  const snapshot = useCallback(async () => {
+    for (let i = 0; i < 30; i++) {
+      const v = elRef.current
+      if (v && v.videoWidth > 0 && v.readyState >= 2) break
+      await new Promise((r) => setTimeout(r, 100))
+    }
+    const v = elRef.current
+    if (!v || !v.videoWidth) return null
     const c = document.createElement('canvas')
     c.width = v.videoWidth
     c.height = v.videoHeight
     c.getContext('2d').drawImage(v, 0, 0)
-    c.toBlob((b) => resolve(b && Object.assign(b, { name: 'camera.jpg' })), 'image/jpeg', 0.92)
-  }), [])
+    return new Promise((resolve) => c.toBlob((b) => resolve(b && Object.assign(b, { name: 'camera.jpg' })), 'image/jpeg', 0.92))
+  }, [])
 
-  return { videoRef, ...state, start, stop, snapshot }
+  // Capture n frames, `intervalMs` apart, for the head-turn liveness challenge.
+  const burst = useCallback(async (n = 10, intervalMs = 300, onFrame = () => {}) => {
+    const frames = []
+    for (let i = 0; i < n; i++) {
+      const b = await snapshot()
+      if (b) frames.push(Object.assign(b, { name: `frame${i}.jpg` }))
+      onFrame(i + 1)
+      await new Promise((r) => setTimeout(r, intervalMs))
+    }
+    return frames
+  }, [snapshot])
+
+  return { videoRef: attach, ...state, start, stop, snapshot, burst }
 }
 
 // ---- microphone -> 16 kHz mono WAV ---------------------------------------

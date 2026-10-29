@@ -119,6 +119,32 @@ class FaceModule(BiometricModule):
                    "brightness": round(bright, 1), "detector_score": round(float(best[-1]), 3)}
         return emb, round(float(q), 3), details
 
+    # ---- helpers for liveness checks -----------------------------------
+    def landmarks(self, data: bytes):
+        """Decode one frame and return (landmarks 5x2, detection row, image), or None if there is not
+        exactly one clear face. Order of the 5 points: right eye, left eye, nose tip, right and left
+        mouth corner (YuNet's convention; right/left are the subject's, in image coordinates)."""
+        self._load()
+        try:
+            img = self._decode(data)
+        except BiometricInputError:
+            return None
+        h, w = img.shape[:2]
+        with self._lock:
+            self._det.setInputSize((w, h))
+            _, faces = self._det.detect(img)
+        if faces is None or len(faces) == 0:
+            return None
+        faces = faces[np.argsort(-(faces[:, 2] * faces[:, 3]))]
+        best = faces[0]
+        if best[-1] < 0.8 or (len(faces) > 1 and faces[1][2] * faces[1][3] > 0.5 * best[2] * best[3]):
+            return None
+        return best[4:14].reshape(5, 2).astype(np.float64), best, img
+
+    def embedding_for(self, img: np.ndarray, row: np.ndarray) -> np.ndarray:
+        with self._lock:
+            return self._rec.feature(self._rec.alignCrop(img, row)).astype(np.float32).ravel()
+
     # ---- BiometricModule API ------------------------------------------
     def enroll(self, samples: list[bytes]) -> tuple[dict, float, int]:
         if not samples:

@@ -4,9 +4,9 @@ This is a student prototype. These are the things that stop it from being more t
 
 ## Hardware
 
-- **Fingerprint:** a browser cannot read a laptop fingerprint reader, and no scanner SDK is integrated. The fingerprint module only compares fingerprint images (dataset or exported). Real fingerprint capture is not implemented.
+- **Fingerprint** is optional and not needed for sign-in, payments or any policy. A browser cannot read a laptop fingerprint reader, and no scanner SDK is integrated. The fingerprint module only compares fingerprint images (dataset or exported). Real fingerprint capture is not implemented.
 - Face and voice capture depend on the browser giving camera and microphone access, which needs `localhost` or https. Upload is the fallback.
-- No liveness or anti-spoofing exists for any modality. A photo, a screen replay or a recording of the enrolled person is accepted. The scores say nothing about presentation attacks.
+- Liveness exists only as challenge-response for face (head turn) and voice (spoken words), and only above a risk level. It stops still photos and pre-recorded audio. It does not stop a video of the owner turning, a deepfake, voice cloning or a mask, fingerprint has none, and the head-turn check has never run on a real webcam. Its thresholds come from a simulation on LFW stills, not a spoofing dataset. Below the required risk level, and for the verification scores themselves, a photo or recording of the enrolled person is still accepted. See [SECURITY.md](SECURITY.md).
 
 ## Data and models
 
@@ -25,8 +25,8 @@ The full list is in [SECURITY.md](SECURITY.md). The ones that matter most:
 
 - Passwords and bearer tokens travel unencrypted unless a TLS proxy is added. There is no TLS in the project.
 - Sessions live in `sessionStorage`, readable by any script on the page. No CSP headers.
-- Per-account lockout can be used to lock someone else out. There is no per-IP rate limit, no CAPTCHA, and registration is open by default.
-- Enrollment is not identity proofing and there is no email verification.
+- Lockouts are scoped to device and network so they cannot be used against the owner, but an attacker with many addresses is only slowed, there is no CAPTCHA, no rate limit on registration, and registration is open by default.
+- Enrollment is not identity proofing and there is no email verification. Changing biometrics on an account that already has some needs matching proof samples, but the first enrollment needs only the password, proof samples are not liveness-checked, and recovery relies on an administrator checking with the owner by another channel (there is no mail service). See [SECURITY.md](SECURITY.md).
 - Template encryption is at rest only and the key sits next to the data unless provided through the environment. Embeddings are still biometric data.
 - Large uploads (over 1 MB) are spooled to a temporary file by the web framework until the request ends.
 - Scores are shown to users by default; the accept/reject answer still works as an oracle for patient attackers.

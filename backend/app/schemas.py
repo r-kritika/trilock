@@ -20,6 +20,7 @@ class UserCreate(BaseModel):
 
 class EnrollmentStatus(BaseModel):
     modality: str
+    required: bool = False         # face and voice are required for sign-in; fingerprint is optional
     state: Literal["enrolled", "not_enrolled"]
     method: str | None
     sample_count: int
@@ -40,6 +41,9 @@ class UserOut(ORM):
 
 class UserDetail(UserOut):
     enrollments: list[EnrollmentStatus]
+    probation_until: datetime | None = None
+    session_scope: str | None = None
+    recovery: list[dict[str, Any]] = []       # open or recent recovery requests for this account
 
 
 TransactionType = Literal["domestic_transfer", "bill_payment", "cash_withdrawal", "wire_transfer"]
@@ -55,6 +59,7 @@ class TransactionCreate(BaseModel):
     is_international: bool = False
     new_device: bool = False
     note: str | None = Field(default=None, max_length=200)
+    local_hour: int | None = Field(default=None, ge=0, le=23)    # the user's local hour; enables the time-of-day factor
 
 
 class RiskPreviewIn(BaseModel):
@@ -63,6 +68,7 @@ class RiskPreviewIn(BaseModel):
     recipient_is_new: bool = False
     is_international: bool = False
     new_device: bool = False
+    local_hour: int | None = Field(default=None, ge=0, le=23)
 
 
 class AttemptOut(ORM):
@@ -91,6 +97,7 @@ class TransactionOut(ORM):
     is_international: bool
     new_device: bool
     note: str | None
+    local_hour: int | None = None
     risk_score: float
     risk_category: str
     risk_factors: list[dict[str, Any]]

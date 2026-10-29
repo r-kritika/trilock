@@ -4,7 +4,8 @@
   python scripts/download_models.py --face-only
 
 Face models come from the OpenCV Zoo on GitHub. The voice model is fetched through SpeechBrain
-from Hugging Face and needs requirements-ml.txt installed.
+from Hugging Face and the speech recognizer (spoken liveness challenge, ~75 MB) through faster-whisper;
+both need requirements-ml.txt installed.
 """
 import argparse
 import sys
@@ -46,6 +47,13 @@ def main() -> int:
         print("voice model ready")
     except ImportError as e:
         print(f"voice model skipped: {e}. Install requirements-ml.txt first.")
+        return 1
+    try:
+        from faster_whisper import WhisperModel
+        WhisperModel("tiny.en", device="cpu", compute_type="int8", download_root=str(MODELS / "whisper"))
+        print("speech recognizer (for the spoken liveness challenge) ready")
+    except ImportError as e:
+        print(f"speech recognizer skipped: {e}. Install requirements-ml.txt first.")
         return 1
     return 0
 

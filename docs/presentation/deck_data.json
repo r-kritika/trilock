@@ -1,0 +1,6436 @@
+{
+ "mod_face": {
+  "genuine_trials": 283,
+  "impostor_trials": 420,
+  "eer": 0.00445,
+  "far": 0.00503,
+  "far_ci": [
+   0.00138,
+   0.01814
+  ],
+  "frr": 0.00388,
+  "frr_ci": [
+   0.00068,
+   0.02163
+  ],
+  "not_evaluable_rate": 0.06686,
+  "latency_ms_mean": 13.8,
+  "latency_ms_p95": 20.0,
+  "evaluation_subjects": 127,
+  "splits": {
+   "count": 10,
+   "far": {
+    "mean": 0.00247,
+    "sd": 0.00166,
+    "n": 10
+   },
+   "frr": {
+    "mean": 0.00552,
+    "sd": 0.00328,
+    "n": 10
+   },
+   "eer": {
+    "mean": 0.00431,
+    "sd": 0.0018,
+    "n": 10
+   },
+   "threshold": {
+    "mean": 0.39926,
+    "sd": 0.01422,
+    "n": 10
+   },
+   "not_evaluable_rate": {
+    "mean": 0.06651,
+    "sd": 0.00762,
+    "n": 10
+   },
+   "genuine_trials": {
+    "mean": 277.0,
+    "sd": 8.25967,
+    "n": 10
+   },
+   "impostor_trials": {
+    "mean": 427.4,
+    "sd": 14.577,
+    "n": 10
+   },
+   "per_split": [
+    {
+     "seed": 1,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 283,
+     "impostor_trials": 420,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.3884,
+      "scale": 0.0578
+     },
+     "threshold": 0.3884,
+     "far": 0.00503,
+     "frr": 0.00388,
+     "eer": 0.00445,
+     "eer_threshold": 0.3916,
+     "far_at_configured": 0.00754,
+     "frr_at_configured": 0.00388,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.06686,
+     "genuine_evaluated": 258,
+     "impostor_evaluated": 398,
+     "far_ci": [
+      0.00138,
+      0.01814
+     ],
+     "frr_ci": [
+      0.00068,
+      0.02163
+     ],
+     "genuine_mean": 0.70507,
+     "impostor_mean": 0.11285
+    },
+    {
+     "seed": 2,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 266,
+     "impostor_trials": 419,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.379,
+      "scale": 0.0587
+     },
+     "threshold": 0.379,
+     "far": 0.00247,
+     "frr": 0.00417,
+     "eer": 0.00455,
+     "eer_threshold": 0.3748,
+     "far_at_configured": 0.00741,
+     "frr_at_configured": 0.00417,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.05839,
+     "genuine_evaluated": 240,
+     "impostor_evaluated": 405,
+     "far_ci": [
+      0.00044,
+      0.01385
+     ],
+     "frr_ci": [
+      0.00074,
+      0.02322
+     ],
+     "genuine_mean": 0.69848,
+     "impostor_mean": 0.11933
+    },
+    {
+     "seed": 3,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 281,
+     "impostor_trials": 424,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.4295,
+      "scale": 0.0589
+     },
+     "threshold": 0.4295,
+     "far": 0.0,
+     "frr": 0.01172,
+     "eer": 0.00442,
+     "eer_threshold": 0.3174,
+     "far_at_configured": 0.00247,
+     "frr_at_configured": 0.00781,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.06241,
+     "genuine_evaluated": 256,
+     "impostor_evaluated": 405,
+     "far_ci": [
+      0.0,
+      0.0094
+     ],
+     "frr_ci": [
+      0.00399,
+      0.03388
+     ],
+     "genuine_mean": 0.69451,
+     "impostor_mean": 0.11731
+    },
+    {
+     "seed": 4,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 282,
+     "impostor_trials": 438,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.4125,
+      "scale": 0.0593
+     },
+     "threshold": 0.4125,
+     "far": 0.00237,
+     "frr": 0.00778,
+     "eer": 0.00432,
+     "eer_threshold": 0.3309,
+     "far_at_configured": 0.00237,
+     "frr_at_configured": 0.00778,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.05694,
+     "genuine_evaluated": 257,
+     "impostor_evaluated": 422,
+     "far_ci": [
+      0.00042,
+      0.0133
+     ],
+     "frr_ci": [
+      0.00214,
+      0.02793
+     ],
+     "genuine_mean": 0.69406,
+     "impostor_mean": 0.11484
+    },
+    {
+     "seed": 5,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 272,
+     "impostor_trials": 436,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.3926,
+      "scale": 0.0583
+     },
+     "threshold": 0.3926,
+     "far": 0.00243,
+     "frr": 0.00405,
+     "eer": 0.00446,
+     "eer_threshold": 0.3916,
+     "far_at_configured": 0.00973,
+     "frr_at_configured": 0.00405,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.07062,
+     "genuine_evaluated": 247,
+     "impostor_evaluated": 411,
+     "far_ci": [
+      0.00043,
+      0.01365
+     ],
+     "frr_ci": [
+      0.00072,
+      0.02257
+     ],
+     "genuine_mean": 0.70415,
+     "impostor_mean": 0.11757
+    },
+    {
+     "seed": 6,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 280,
+     "impostor_trials": 460,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.3959,
+      "scale": 0.0591
+     },
+     "threshold": 0.3959,
+     "far": 0.00231,
+     "frr": 0.00392,
+     "eer": 0.00428,
+     "eer_threshold": 0.3916,
+     "far_at_configured": 0.00463,
+     "frr_at_configured": 0.00392,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.07162,
+     "genuine_evaluated": 255,
+     "impostor_evaluated": 432,
+     "far_ci": [
+      0.00041,
+      0.01299
+     ],
+     "frr_ci": [
+      0.00069,
+      0.02188
+     ],
+     "genuine_mean": 0.69624,
+     "impostor_mean": 0.11785
+    },
+    {
+     "seed": 7,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 261,
+     "impostor_trials": 407,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.3899,
+      "scale": 0.0577
+     },
+     "threshold": 0.3899,
+     "far": 0.00258,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 0.4154,
+     "far_at_configured": 0.00258,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.05689,
+     "genuine_evaluated": 243,
+     "impostor_evaluated": 387,
+     "far_ci": [
+      0.00046,
+      0.01449
+     ],
+     "frr_ci": [
+      0.0,
+      0.01556
+     ],
+     "genuine_mean": 0.71156,
+     "impostor_mean": 0.11637
+    },
+    {
+     "seed": 8,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 276,
+     "impostor_trials": 423,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.4065,
+      "scale": 0.0581
+     },
+     "threshold": 0.4065,
+     "far": 0.0,
+     "frr": 0.00806,
+     "eer": 0.00454,
+     "eer_threshold": 0.2972,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.00806,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.07868,
+     "genuine_evaluated": 248,
+     "impostor_evaluated": 396,
+     "far_ci": [
+      0.0,
+      0.00961
+     ],
+     "frr_ci": [
+      0.00221,
+      0.02892
+     ],
+     "genuine_mean": 0.69999,
+     "impostor_mean": 0.10994
+    },
+    {
+     "seed": 9,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 287,
+     "impostor_trials": 429,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.401,
+      "scale": 0.0576
+     },
+     "threshold": 0.401,
+     "far": 0.00494,
+     "frr": 0.00763,
+     "eer": 0.00752,
+     "eer_threshold": 0.3916,
+     "far_at_configured": 0.00988,
+     "frr_at_configured": 0.00763,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.06844,
+     "genuine_evaluated": 262,
+     "impostor_evaluated": 405,
+     "far_ci": [
+      0.00136,
+      0.01782
+     ],
+     "frr_ci": [
+      0.0021,
+      0.0274
+     ],
+     "genuine_mean": 0.70127,
+     "impostor_mean": 0.11033
+    },
+    {
+     "seed": 10,
+     "calibration_subjects": 126,
+     "evaluation_subjects": 127,
+     "genuine_trials": 282,
+     "impostor_trials": 418,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 0.3973,
+      "scale": 0.0595
+     },
+     "threshold": 0.3973,
+     "far": 0.00253,
+     "frr": 0.00395,
+     "eer": 0.00451,
+     "eer_threshold": 0.3838,
+     "far_at_configured": 0.00506,
+     "frr_at_configured": 0.00395,
+     "configured_threshold": 0.363,
+     "not_evaluable_rate": 0.07429,
+     "genuine_evaluated": 253,
+     "impostor_evaluated": 395,
+     "far_ci": [
+      0.00045,
+      0.0142
+     ],
+     "frr_ci": [
+      0.0007,
+      0.02205
+     ],
+     "genuine_mean": 0.6888,
+     "impostor_mean": 0.11537
+    }
+   ]
+  },
+  "degraded": [
+   {
+    "condition": "mild blur (sigma 1.5)",
+    "trials": 200,
+    "far": 0.01351,
+    "frr": 0.0,
+    "not_evaluable_rate": 0.345,
+    "genuine_evaluated": 57,
+    "impostor_evaluated": 74
+   },
+   {
+    "condition": "strong blur (sigma 4)",
+    "trials": 200,
+    "far": null,
+    "frr": null,
+    "not_evaluable_rate": 1.0,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 0
+   },
+   {
+    "condition": "dim light (x0.4)",
+    "trials": 200,
+    "far": 0.0,
+    "frr": 0.0,
+    "not_evaluable_rate": 0.68,
+    "genuine_evaluated": 28,
+    "impostor_evaluated": 36
+   },
+   {
+    "condition": "very dark (x0.18)",
+    "trials": 200,
+    "far": null,
+    "frr": null,
+    "not_evaluable_rate": 1.0,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 0
+   },
+   {
+    "condition": "half resolution, JPEG q30",
+    "trials": 200,
+    "far": null,
+    "frr": null,
+    "not_evaluable_rate": 1.0,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 0
+   },
+   {
+    "condition": "1/5 resolution, JPEG q15",
+    "trials": 200,
+    "far": null,
+    "frr": null,
+    "not_evaluable_rate": 1.0,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 0
+   }
+  ],
+  "synthetic": false
+ },
+ "mod_fingerprint": {
+  "genuine_trials": 150,
+  "impostor_trials": 196,
+  "eer": 0.0,
+  "far": 0.0,
+  "far_ci": [
+   0.0,
+   0.01922
+  ],
+  "frr": 0.0,
+  "frr_ci": [
+   0.0,
+   0.02497
+  ],
+  "not_evaluable_rate": 0.0,
+  "latency_ms_mean": 29.3,
+  "latency_ms_p95": 46.5,
+  "evaluation_subjects": 50,
+  "splits": {
+   "count": 10,
+   "far": {
+    "mean": 0.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "frr": {
+    "mean": 0.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "eer": {
+    "mean": 0.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "threshold": {
+    "mean": 30.20108,
+    "sd": 3.19789,
+    "n": 10
+   },
+   "not_evaluable_rate": {
+    "mean": 0.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "genuine_trials": {
+    "mean": 150.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "impostor_trials": {
+    "mean": 199.9,
+    "sd": 7.60774,
+    "n": 10
+   },
+   "per_split": [
+    {
+     "seed": 1,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 196,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 28.7811,
+      "scale": 7.8138
+     },
+     "threshold": 28.7811,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 41.0,
+     "far_at_configured": 0.0051,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 196,
+     "far_ci": [
+      0.0,
+      0.01922
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 79.94,
+     "impostor_mean": 3.54592
+    },
+    {
+     "seed": 2,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 195,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 28.5737,
+      "scale": 7.5804
+     },
+     "threshold": 28.5737,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 41.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 195,
+     "far_ci": [
+      0.0,
+      0.01932
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 82.41333,
+     "impostor_mean": 3.50769
+    },
+    {
+     "seed": 3,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 194,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 28.9353,
+      "scale": 7.6667
+     },
+     "threshold": 28.9353,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 39.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 194,
+     "far_ci": [
+      0.0,
+      0.01942
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 81.62,
+     "impostor_mean": 3.61856
+    },
+    {
+     "seed": 4,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 211,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 29.6143,
+      "scale": 7.7563
+     },
+     "threshold": 29.6143,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 39.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 211,
+     "far_ci": [
+      0.0,
+      0.01788
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 80.52667,
+     "impostor_mean": 3.70142
+    },
+    {
+     "seed": 5,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 209,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 29.1825,
+      "scale": 7.5765
+     },
+     "threshold": 29.1825,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 41.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 209,
+     "far_ci": [
+      0.0,
+      0.01805
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 82.46,
+     "impostor_mean": 3.5311
+    },
+    {
+     "seed": 6,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 194,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 27.6588,
+      "scale": 7.6879
+     },
+     "threshold": 27.6588,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 54.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 194,
+     "far_ci": [
+      0.0,
+      0.01942
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 81.44667,
+     "impostor_mean": 3.45876
+    },
+    {
+     "seed": 7,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 206,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 27.6873,
+      "scale": 7.5271
+     },
+     "threshold": 27.6873,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 54.0,
+     "far_at_configured": 0.00485,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 206,
+     "far_ci": [
+      0.0,
+      0.01831
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 82.94,
+     "impostor_mean": 3.74272
+    },
+    {
+     "seed": 8,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 208,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 36.3758,
+      "scale": 7.9708
+     },
+     "threshold": 36.3758,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 39.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 208,
+     "far_ci": [
+      0.0,
+      0.01813
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 78.63333,
+     "impostor_mean": 3.57212
+    },
+    {
+     "seed": 9,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 191,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 35.9147,
+      "scale": 7.8664
+     },
+     "threshold": 35.9147,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 39.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 191,
+     "far_ci": [
+      0.0,
+      0.01972
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 79.51333,
+     "impostor_mean": 3.51832
+    },
+    {
+     "seed": 10,
+     "calibration_subjects": 50,
+     "evaluation_subjects": 50,
+     "genuine_trials": 150,
+     "impostor_trials": 195,
+     "cross_group_genuine": 0,
+     "fit": {
+      "center": 29.2873,
+      "scale": 7.7577
+     },
+     "threshold": 29.2873,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 41.0,
+     "far_at_configured": 0.0,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 14.0,
+     "not_evaluable_rate": 0.0,
+     "genuine_evaluated": 150,
+     "impostor_evaluated": 195,
+     "far_ci": [
+      0.0,
+      0.01932
+     ],
+     "frr_ci": [
+      0.0,
+      0.02497
+     ],
+     "genuine_mean": 80.52,
+     "impostor_mean": 3.55385
+    }
+   ]
+  },
+  "degraded": [
+   {
+    "condition": "half occluded",
+    "trials": 150,
+    "far": 0.0,
+    "frr": 0.18033,
+    "not_evaluable_rate": 0.07333,
+    "genuine_evaluated": 61,
+    "impostor_evaluated": 78
+   },
+   {
+    "condition": "heavy noise (sigma 40)",
+    "trials": 150,
+    "far": 0.0,
+    "frr": 1.0,
+    "not_evaluable_rate": 0.0,
+    "genuine_evaluated": 65,
+    "impostor_evaluated": 85
+   }
+  ],
+  "synthetic": true
+ },
+ "mod_voice": {
+  "genuine_trials": 65,
+  "impostor_trials": 53,
+  "eer": 0.0,
+  "far": 0.0,
+  "far_ci": [
+   0.0,
+   0.06879
+  ],
+  "frr": 0.03125,
+  "frr_ci": [
+   0.00861,
+   0.10697
+  ],
+  "not_evaluable_rate": 0.01695,
+  "latency_ms_mean": 883.6,
+  "latency_ms_p95": 1879.7,
+  "evaluation_subjects": 13,
+  "splits": {
+   "count": 10,
+   "far": {
+    "mean": 0.01367,
+    "sd": 0.01841,
+    "n": 10
+   },
+   "frr": {
+    "mean": 0.00779,
+    "sd": 0.01103,
+    "n": 10
+   },
+   "eer": {
+    "mean": 0.00707,
+    "sd": 0.00915,
+    "n": 10
+   },
+   "threshold": {
+    "mean": 0.4042,
+    "sd": 0.02919,
+    "n": 10
+   },
+   "not_evaluable_rate": {
+    "mean": 0.01392,
+    "sd": 0.00447,
+    "n": 10
+   },
+   "genuine_trials": {
+    "mean": 65.0,
+    "sd": 0.0,
+    "n": 10
+   },
+   "impostor_trials": {
+    "mean": 49.9,
+    "sd": 5.17365,
+    "n": 10
+   },
+   "per_split": [
+    {
+     "seed": 1,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 53,
+     "cross_group_genuine": 25,
+     "fit": {
+      "center": 0.4542,
+      "scale": 0.0628
+     },
+     "threshold": 0.4542,
+     "far": 0.0,
+     "frr": 0.03125,
+     "eer": 0.0,
+     "eer_threshold": 0.4102,
+     "far_at_configured": 0.03846,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.01695,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 52,
+     "far_ci": [
+      0.0,
+      0.06879
+     ],
+     "frr_ci": [
+      0.00861,
+      0.10697
+     ],
+     "genuine_mean": 0.74326,
+     "impostor_mean": 0.08908
+    },
+    {
+     "seed": 2,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 52,
+     "cross_group_genuine": 25,
+     "fit": {
+      "center": 0.3942,
+      "scale": 0.064
+     },
+     "threshold": 0.3942,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 0.4897,
+     "far_at_configured": 0.11538,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.00855,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 52,
+     "far_ci": [
+      0.0,
+      0.06879
+     ],
+     "frr_ci": [
+      0.0,
+      0.05663
+     ],
+     "genuine_mean": 0.77805,
+     "impostor_mean": 0.11971
+    },
+    {
+     "seed": 3,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 59,
+     "cross_group_genuine": 15,
+     "fit": {
+      "center": 0.3559,
+      "scale": 0.0586
+     },
+     "threshold": 0.3559,
+     "far": 0.03448,
+     "frr": 0.0,
+     "eer": 0.01643,
+     "eer_threshold": 0.5567,
+     "far_at_configured": 0.10345,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.01613,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 58,
+     "far_ci": [
+      0.00951,
+      0.11729
+     ],
+     "frr_ci": [
+      0.0,
+      0.05663
+     ],
+     "genuine_mean": 0.78958,
+     "impostor_mean": 0.10251
+    },
+    {
+     "seed": 4,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 48,
+     "cross_group_genuine": 25,
+     "fit": {
+      "center": 0.4162,
+      "scale": 0.0632
+     },
+     "threshold": 0.4162,
+     "far": 0.02128,
+     "frr": 0.01562,
+     "eer": 0.01845,
+     "eer_threshold": 0.4344,
+     "far_at_configured": 0.12766,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.0177,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 47,
+     "far_ci": [
+      0.00377,
+      0.11113
+     ],
+     "frr_ci": [
+      0.00276,
+      0.08334
+     ],
+     "genuine_mean": 0.76134,
+     "impostor_mean": 0.10484
+    },
+    {
+     "seed": 5,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 43,
+     "cross_group_genuine": 35,
+     "fit": {
+      "center": 0.4129,
+      "scale": 0.0662
+     },
+     "threshold": 0.4129,
+     "far": 0.0,
+     "frr": 0.01562,
+     "eer": 0.0,
+     "eer_threshold": 0.4102,
+     "far_at_configured": 0.04651,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.00926,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 43,
+     "far_ci": [
+      0.0,
+      0.08201
+     ],
+     "frr_ci": [
+      0.00276,
+      0.08334
+     ],
+     "genuine_mean": 0.72998,
+     "impostor_mean": 0.09164
+    },
+    {
+     "seed": 6,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 52,
+     "cross_group_genuine": 15,
+     "fit": {
+      "center": 0.3756,
+      "scale": 0.0639
+     },
+     "threshold": 0.3756,
+     "far": 0.03922,
+     "frr": 0.0,
+     "eer": 0.01762,
+     "eer_threshold": 0.4773,
+     "far_at_configured": 0.15686,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.01709,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 51,
+     "far_ci": [
+      0.01082,
+      0.13217
+     ],
+     "frr_ci": [
+      0.0,
+      0.05663
+     ],
+     "genuine_mean": 0.76814,
+     "impostor_mean": 0.12051
+    },
+    {
+     "seed": 7,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 47,
+     "cross_group_genuine": 30,
+     "fit": {
+      "center": 0.4409,
+      "scale": 0.0661
+     },
+     "threshold": 0.4409,
+     "far": 0.0,
+     "frr": 0.01538,
+     "eer": 0.0,
+     "eer_threshold": 0.4344,
+     "far_at_configured": 0.13043,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.00893,
+     "genuine_evaluated": 65,
+     "impostor_evaluated": 46,
+     "far_ci": [
+      0.0,
+      0.07708
+     ],
+     "frr_ci": [
+      0.00272,
+      0.08213
+     ],
+     "genuine_mean": 0.73099,
+     "impostor_mean": 0.08541
+    },
+    {
+     "seed": 8,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 42,
+     "cross_group_genuine": 15,
+     "fit": {
+      "center": 0.3958,
+      "scale": 0.0644
+     },
+     "threshold": 0.3958,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 0.4344,
+     "far_at_configured": 0.19048,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.01869,
+     "genuine_evaluated": 63,
+     "impostor_evaluated": 42,
+     "far_ci": [
+      0.0,
+      0.0838
+     ],
+     "frr_ci": [
+      0.0,
+      0.05747
+     ],
+     "genuine_mean": 0.75708,
+     "impostor_mean": 0.13421
+    },
+    {
+     "seed": 9,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 49,
+     "cross_group_genuine": 25,
+     "fit": {
+      "center": 0.388,
+      "scale": 0.0666
+     },
+     "threshold": 0.388,
+     "far": 0.04167,
+     "frr": 0.0,
+     "eer": 0.01823,
+     "eer_threshold": 0.4534,
+     "far_at_configured": 0.0625,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.01754,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 48,
+     "far_ci": [
+      0.0115,
+      0.13976
+     ],
+     "frr_ci": [
+      0.0,
+      0.05663
+     ],
+     "genuine_mean": 0.75608,
+     "impostor_mean": 0.11532
+    },
+    {
+     "seed": 10,
+     "calibration_subjects": 13,
+     "evaluation_subjects": 13,
+     "genuine_trials": 65,
+     "impostor_trials": 54,
+     "cross_group_genuine": 30,
+     "fit": {
+      "center": 0.4083,
+      "scale": 0.0653
+     },
+     "threshold": 0.4083,
+     "far": 0.0,
+     "frr": 0.0,
+     "eer": 0.0,
+     "eer_threshold": 0.4102,
+     "far_at_configured": 0.05556,
+     "frr_at_configured": 0.0,
+     "configured_threshold": 0.25,
+     "not_evaluable_rate": 0.0084,
+     "genuine_evaluated": 64,
+     "impostor_evaluated": 54,
+     "far_ci": [
+      0.0,
+      0.06642
+     ],
+     "frr_ci": [
+      0.0,
+      0.05663
+     ],
+     "genuine_mean": 0.75655,
+     "impostor_mean": 0.08837
+    }
+   ]
+  },
+  "degraded": [
+   {
+    "condition": "noise SNR 10 dB",
+    "trials": 60,
+    "far": 0.0,
+    "frr": 0.13793,
+    "not_evaluable_rate": 0.06667,
+    "genuine_evaluated": 29,
+    "impostor_evaluated": 27
+   },
+   {
+    "condition": "noise SNR 0 dB",
+    "trials": 60,
+    "far": 0.0,
+    "frr": null,
+    "not_evaluable_rate": 0.98333,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 1
+   },
+   {
+    "condition": "only 1 s of audio",
+    "trials": 60,
+    "far": null,
+    "frr": null,
+    "not_evaluable_rate": 1.0,
+    "genuine_evaluated": 0,
+    "impostor_evaluated": 0
+   }
+  ],
+  "synthetic": false
+ },
+ "fusion": {
+  "attempts_per_cell": 1000,
+  "repeats": 5,
+  "risk_mix": {
+   "low": 0.4,
+   "medium": 0.3,
+   "high": 0.2,
+   "critical": 0.1
+  },
+  "sources": [
+   "face: data/datasets/lfw/lfw_funneled",
+   "fingerprint: synthetic fingerprints (100 identities x 4 impressions)",
+   "voice: data/datasets/librispeech/LibriSpeech/dev-clean-2"
+  ],
+  "pool_sizes": {
+   "face": {
+    "genuine": 283,
+    "impostor": 420
+   },
+   "fingerprint": {
+    "genuine": 150,
+    "impostor": 196
+   },
+   "voice": {
+    "genuine": 65,
+    "impostor": 53
+   }
+  },
+  "calibration_used": {
+   "face": {
+    "center": 0.3884,
+    "scale": 0.0578,
+    "source": "primary split fit"
+   },
+   "fingerprint": {
+    "center": 28.7811,
+    "scale": 7.8138,
+    "source": "primary split fit"
+   },
+   "voice": {
+    "center": 0.4542,
+    "scale": 0.0628,
+    "source": "primary split fit"
+   }
+  },
+  "conditions": [
+   {
+    "name": "all available modalities",
+    "modalities": [
+     "face",
+     "fingerprint",
+     "voice"
+    ],
+    "pool_size_min": 53,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0006,
+      "genuine_approved": 0.9994,
+      "genuine_additional_rate": 0.0,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0005,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0005,
+      "omission_asr": {
+       "face": 0.899,
+       "fingerprint": 1.0,
+       "voice": 0.9012
+      },
+      "worst_omission_asr": 1.0,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.0,
+       0.06758
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0018,
+        "sd": 0.00115,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0008,
+        "sd": 0.00082,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0006,
+      "genuine_approved": 0.9984,
+      "genuine_additional_rate": 0.001,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0,
+      "omission_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0,
+       "voice": 0.0
+      },
+      "worst_omission_asr": 0.0,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.0,
+       0.06758
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0018,
+        "sd": 0.00115,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.00116,
+        "sd": 0.00077,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 2e-05,
+        "sd": 4e-05,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 0.9317,
+      "genuine_additional_rate": 0.0683,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0004,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0004,
+      "omission_asr": {
+       "face": 0.3612,
+       "fingerprint": 0.4,
+       "voice": 0.3796
+      },
+      "worst_omission_asr": 0.4,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.0,
+       0.06758
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.0714,
+        "sd": 0.00263,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0004,
+        "sd": 0.00049,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.4,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.898
+        },
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.905
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.999,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.001
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.973,
+       "genuine_additional_rate": 0.027,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.733
+        },
+        "fingerprint": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.993
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.901
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.903
+        },
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.949
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.901
+        },
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.896
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.999,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.963,
+       "genuine_additional_rate": 0.037,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.022
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.611
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.811
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.998,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.894
+        },
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.9
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.997,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.862,
+       "genuine_additional_rate": 0.138,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.018
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.092
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.064
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.998,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.907
+        },
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.904
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.997,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.001
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.812,
+       "genuine_additional_rate": 0.188,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.017
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.084
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.055
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    },
+    "fixed_sweep": [
+     {
+      "threshold": 0.5,
+      "genuine_not_approved": 0.0,
+      "far": 0.0,
+      "worst_bypass_asr": 0.048,
+      "worst_omission_asr": 1.0
+     },
+     {
+      "threshold": 0.6,
+      "genuine_not_approved": 0.0,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 1.0
+     },
+     {
+      "threshold": 0.7,
+      "genuine_not_approved": 0.0,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 1.0
+     },
+     {
+      "threshold": 0.8,
+      "genuine_not_approved": 0.025,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 1.0
+     },
+     {
+      "threshold": 0.9,
+      "genuine_not_approved": 0.107,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 0.989
+     },
+     {
+      "threshold": 0.95,
+      "genuine_not_approved": 0.149,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 0.983
+     },
+     {
+      "threshold": 0.99,
+      "genuine_not_approved": 0.412,
+      "far": 0.0,
+      "worst_bypass_asr": 0.0,
+      "worst_omission_asr": 0.88
+     }
+    ]
+   },
+   {
+    "name": "face missing",
+    "modalities": [
+     "fingerprint",
+     "voice"
+    ],
+    "pool_size_min": 53,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0172,
+      "genuine_approved": 0.9828,
+      "genuine_additional_rate": 0.0,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 0.0203,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0203,
+      "omission_asr": {
+       "fingerprint": 1.0,
+       "voice": 0.8887
+      },
+      "worst_omission_asr": 1.0,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.00334,
+       0.09943
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.01668,
+        "sd": 0.00069,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.01964,
+        "sd": 0.00283,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0172,
+      "genuine_approved": 0.9662,
+      "genuine_additional_rate": 0.0166,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 0.0,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0,
+      "omission_asr": {
+       "fingerprint": 0.0,
+       "voice": 0.0
+      },
+      "worst_omission_asr": 0.0,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.00334,
+       0.09943
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.01668,
+        "sd": 0.00069,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.01744,
+        "sd": 0.00199,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 0.6718,
+      "genuine_additional_rate": 0.3282,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 0.0092,
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0092,
+      "omission_asr": {
+       "fingerprint": 0.4,
+       "voice": 0.3728
+      },
+      "worst_omission_asr": 0.4,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.0,
+       0.06758
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.32724,
+        "sd": 0.00186,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.00872,
+        "sd": 0.0029,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.4,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.018,
+       "genuine_approved": 0.982,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.023,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.023,
+       "omission": {
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.887
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.018,
+       "genuine_approved": 0.969,
+       "genuine_additional_rate": 0.013,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.023
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.967,
+       "genuine_additional_rate": 0.033,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.023,
+         "stopped_by_extra_verification": 0.977
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.945
+        }
+       },
+       "worst_bypass_asr": 0.023,
+       "omission": {
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.932
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.018,
+       "genuine_approved": 0.982,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.019,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.019,
+       "omission": {
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.882
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.018,
+       "genuine_approved": 0.959,
+       "genuine_additional_rate": 0.023,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.019
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.95,
+       "genuine_additional_rate": 0.05,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.916
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.016,
+       "genuine_approved": 0.984,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.019,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.019,
+       "omission": {
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.9
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.016,
+       "genuine_approved": 0.967,
+       "genuine_additional_rate": 0.017,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.019
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.889
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.014,
+       "genuine_approved": 0.986,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.016,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.016,
+       "omission": {
+        "fingerprint": {
+         "asr": 1.0
+        },
+        "voice": {
+         "asr": 0.893
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.014,
+       "genuine_approved": 0.975,
+       "genuine_additional_rate": 0.011,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.016
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.99
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.875
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "fingerprint missing",
+    "modalities": [
+     "face",
+     "voice"
+    ],
+    "pool_size_min": 53,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0332,
+      "genuine_approved": 0.9643,
+      "genuine_additional_rate": 0.0025,
+      "impostor_additional_rate": 0.0009,
+      "bypass_asr": {
+       "face": 0.0155,
+       "voice": 0.0521
+      },
+      "worst_bypass_asr": 0.0521,
+      "omission_asr": {
+       "face": 0.9116,
+       "voice": 0.9036
+      },
+      "worst_omission_asr": 0.9116,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.01041,
+       0.12755
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.02992,
+        "sd": 0.00268,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.00144,
+        "sd": 0.00098,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0516,
+        "sd": 0.00368,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.90846,
+        "sd": 0.00731,
+        "n": 5
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0332,
+      "genuine_approved": 0.864,
+      "genuine_additional_rate": 0.1028,
+      "impostor_additional_rate": 0.0009,
+      "bypass_asr": {
+       "face": 0.0,
+       "voice": 0.0072
+      },
+      "worst_bypass_asr": 0.0072,
+      "omission_asr": {
+       "face": 0.0,
+       "voice": 0.0
+      },
+      "worst_omission_asr": 0.0,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.01041,
+       0.12755
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.02992,
+        "sd": 0.00268,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.094,
+        "sd": 0.00574,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.00524,
+        "sd": 0.00116,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0014,
+      "genuine_approved": 0.8904,
+      "genuine_additional_rate": 0.1082,
+      "impostor_additional_rate": 0.0016,
+      "bypass_asr": {
+       "face": 0.0056,
+       "voice": 0.0257
+      },
+      "worst_bypass_asr": 0.0257,
+      "omission_asr": {
+       "face": 0.3628,
+       "voice": 0.3796
+      },
+      "worst_omission_asr": 0.3796,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.0,
+       0.06758
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00122,
+        "sd": 0.00048,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.1059,
+        "sd": 0.00323,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.02166,
+        "sd": 0.00298,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.376,
+        "sd": 0.0032,
+        "n": 5
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.041,
+       "genuine_approved": 0.956,
+       "genuine_additional_rate": 0.003,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.014,
+         "stopped_by_extra_verification": 0.004
+        },
+        "voice": {
+         "asr": 0.056,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.056,
+       "omission": {
+        "face": {
+         "asr": 0.906
+        },
+        "voice": {
+         "asr": 0.903
+        }
+       },
+       "worst_omission_asr": 0.906,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.041,
+       "genuine_approved": 0.849,
+       "genuine_additional_rate": 0.11,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.018
+        },
+        "voice": {
+         "asr": 0.007,
+         "stopped_by_extra_verification": 0.049
+        }
+       },
+       "worst_bypass_asr": 0.007,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.001,
+       "genuine_approved": 0.952,
+       "genuine_additional_rate": 0.047,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.014,
+         "stopped_by_extra_verification": 0.893
+        },
+        "voice": {
+         "asr": 0.059,
+         "stopped_by_extra_verification": 0.871
+        }
+       },
+       "worst_bypass_asr": 0.059,
+       "omission": {
+        "face": {
+         "asr": 0.907
+        },
+        "voice": {
+         "asr": 0.949
+        }
+       },
+       "worst_omission_asr": 0.949,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.035,
+       "genuine_approved": 0.962,
+       "genuine_additional_rate": 0.003,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.014,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.048,
+         "stopped_by_extra_verification": 0.002
+        }
+       },
+       "worst_bypass_asr": 0.048,
+       "omission": {
+        "face": {
+         "asr": 0.919
+        },
+        "voice": {
+         "asr": 0.909
+        }
+       },
+       "worst_omission_asr": 0.919,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.035,
+       "genuine_approved": 0.873,
+       "genuine_additional_rate": 0.092,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.014
+        },
+        "voice": {
+         "asr": 0.008,
+         "stopped_by_extra_verification": 0.042
+        }
+       },
+       "worst_bypass_asr": 0.008,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.863,
+       "genuine_additional_rate": 0.135,
+       "impostor_additional_rate": 0.003,
+       "impostor_rejected_rate": 0.997,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.902
+        },
+        "voice": {
+         "asr": 0.007,
+         "stopped_by_extra_verification": 0.915
+        }
+       },
+       "worst_bypass_asr": 0.007,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.016,
+       "genuine_approved": 0.984,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.021,
+         "stopped_by_extra_verification": 0.002
+        },
+        "voice": {
+         "asr": 0.053,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.053,
+       "omission": {
+        "face": {
+         "asr": 0.919
+        },
+        "voice": {
+         "asr": 0.899
+        }
+       },
+       "worst_omission_asr": 0.919,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.016,
+       "genuine_approved": 0.881,
+       "genuine_additional_rate": 0.103,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.023
+        },
+        "voice": {
+         "asr": 0.008,
+         "stopped_by_extra_verification": 0.045
+        }
+       },
+       "worst_bypass_asr": 0.008,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.001,
+       "genuine_approved": 0.85,
+       "genuine_additional_rate": 0.149,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.897
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.905
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.031,
+       "genuine_approved": 0.965,
+       "genuine_additional_rate": 0.004,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.015,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.047,
+         "stopped_by_extra_verification": 0.002
+        }
+       },
+       "worst_bypass_asr": 0.047,
+       "omission": {
+        "face": {
+         "asr": 0.897
+        },
+        "voice": {
+         "asr": 0.899
+        }
+       },
+       "worst_omission_asr": 0.899,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.031,
+       "genuine_approved": 0.863,
+       "genuine_additional_rate": 0.106,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.015
+        },
+        "voice": {
+         "asr": 0.004,
+         "stopped_by_extra_verification": 0.045
+        }
+       },
+       "worst_bypass_asr": 0.004,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.807,
+       "genuine_additional_rate": 0.191,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.705
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.891
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "voice missing",
+    "modalities": [
+     "face",
+     "fingerprint"
+    ],
+    "pool_size_min": 150,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0034,
+      "genuine_approved": 0.9966,
+      "genuine_additional_rate": 0.0,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0602
+      },
+      "worst_bypass_asr": 0.0602,
+      "omission_asr": {
+       "face": 0.9022,
+       "fingerprint": 1.0
+      },
+      "worst_omission_asr": 1.0,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.00118,
+       0.03679
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00338,
+        "sd": 0.00126,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.06006,
+        "sd": 0.0024,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0034,
+      "genuine_approved": 0.9058,
+      "genuine_additional_rate": 0.0908,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0074
+      },
+      "worst_bypass_asr": 0.0074,
+      "omission_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0
+      },
+      "worst_omission_asr": 0.0,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.00118,
+       0.03679
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00338,
+        "sd": 0.00126,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.09002,
+        "sd": 0.00526,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0079,
+        "sd": 0.00187,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 0.6682,
+      "genuine_additional_rate": 0.3318,
+      "impostor_additional_rate": 0.0004,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0238
+      },
+      "worst_bypass_asr": 0.0238,
+      "omission_asr": {
+       "face": 0.3628,
+       "fingerprint": 0.4
+      },
+      "worst_omission_asr": 0.4,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.0,
+       0.02497
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.3302,
+        "sd": 0.00179,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.02428,
+        "sd": 0.00304,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.4,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.003,
+       "genuine_approved": 0.997,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.057,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.057,
+       "omission": {
+        "face": {
+         "asr": 0.902
+        },
+        "fingerprint": {
+         "asr": 1.0
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.003,
+       "genuine_approved": 0.914,
+       "genuine_additional_rate": 0.083,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.008,
+         "stopped_by_extra_verification": 0.049
+        }
+       },
+       "worst_bypass_asr": 0.008,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.997,
+       "genuine_additional_rate": 0.003,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.898
+        },
+        "fingerprint": {
+         "asr": 0.055,
+         "stopped_by_extra_verification": 0.945
+        }
+       },
+       "worst_bypass_asr": 0.055,
+       "omission": {
+        "face": {
+         "asr": 0.907
+        },
+        "fingerprint": {
+         "asr": 1.0
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.004,
+       "genuine_approved": 0.996,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.068,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.068,
+       "omission": {
+        "face": {
+         "asr": 0.912
+        },
+        "fingerprint": {
+         "asr": 1.0
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.00118,
+        0.03679
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.004,
+       "genuine_approved": 0.898,
+       "genuine_additional_rate": 0.098,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.008,
+         "stopped_by_extra_verification": 0.06
+        }
+       },
+       "worst_bypass_asr": 0.008,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.00118,
+        0.03679
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.898,
+       "genuine_additional_rate": 0.102,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.913
+        },
+        "fingerprint": {
+         "asr": 0.006,
+         "stopped_by_extra_verification": 0.994
+        }
+       },
+       "worst_bypass_asr": 0.006,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.998,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.06,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.06,
+       "omission": {
+        "face": {
+         "asr": 0.89
+        },
+        "fingerprint": {
+         "asr": 1.0
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.002,
+       "genuine_approved": 0.906,
+       "genuine_additional_rate": 0.092,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.005,
+         "stopped_by_extra_verification": 0.055
+        }
+       },
+       "worst_bypass_asr": 0.005,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.891
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.006,
+       "genuine_approved": 0.994,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.05,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 0.05,
+       "omission": {
+        "face": {
+         "asr": 0.898
+        },
+        "fingerprint": {
+         "asr": 1.0
+        }
+       },
+       "worst_omission_asr": 1.0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.00118,
+        0.03679
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.006,
+       "genuine_approved": 0.896,
+       "genuine_additional_rate": 0.098,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.008,
+         "stopped_by_extra_verification": 0.042
+        }
+       },
+       "worst_bypass_asr": 0.008,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.00118,
+        0.03679
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.788
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.992
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "only face",
+    "modalities": [
+     "face"
+    ],
+    "pool_size_min": 283,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0064,
+      "genuine_approved": 0.9103,
+      "genuine_additional_rate": 0.0833,
+      "impostor_additional_rate": 0.0502,
+      "bypass_asr": {
+       "face": 0.9011
+      },
+      "worst_bypass_asr": 0.9011,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.01339
+      ],
+      "frr_ci": [
+       0.00194,
+       0.0254
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00752,
+        "sd": 0.00193,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.08746,
+        "sd": 0.00604,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.90364,
+        "sd": 0.00486,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0064,
+      "genuine_approved": 0.0,
+      "genuine_additional_rate": 0.9936,
+      "impostor_additional_rate": 0.0502,
+      "bypass_asr": {
+       "face": 0.0
+      },
+      "worst_bypass_asr": 0.0,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.01339
+      ],
+      "frr_ci": [
+       0.00194,
+       0.0254
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00752,
+        "sd": 0.00193,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.99248,
+        "sd": 0.00193,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0036,
+      "genuine_approved": 0.3644,
+      "genuine_additional_rate": 0.632,
+      "impostor_additional_rate": 0.057,
+      "bypass_asr": {
+       "face": 0.3644
+      },
+      "worst_bypass_asr": 0.3644,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.01339
+      ],
+      "frr_ci": [
+       0.00062,
+       0.01974
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.00422,
+        "sd": 0.00101,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.63426,
+        "sd": 0.00554,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.36328,
+        "sd": 0.00629,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.911,
+       "genuine_additional_rate": 0.084,
+       "impostor_additional_rate": 0.056,
+       "impostor_rejected_rate": 0.944,
+       "bypass": {
+        "face": {
+         "asr": 0.909,
+         "stopped_by_extra_verification": 0.086
+        }
+       },
+       "worst_bypass_asr": 0.909,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.995,
+       "impostor_additional_rate": 0.056,
+       "impostor_rejected_rate": 0.944,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.995
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.911,
+       "genuine_additional_rate": 0.084,
+       "impostor_additional_rate": 0.062,
+       "impostor_rejected_rate": 0.938,
+       "bypass": {
+        "face": {
+         "asr": 0.911,
+         "stopped_by_extra_verification": 0.086
+        }
+       },
+       "worst_bypass_asr": 0.911,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.009,
+       "genuine_approved": 0.908,
+       "genuine_additional_rate": 0.083,
+       "impostor_additional_rate": 0.045,
+       "impostor_rejected_rate": 0.955,
+       "bypass": {
+        "face": {
+         "asr": 0.902,
+         "stopped_by_extra_verification": 0.093
+        }
+       },
+       "worst_bypass_asr": 0.902,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00361,
+        0.0307
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.009,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.991,
+       "impostor_additional_rate": 0.045,
+       "impostor_rejected_rate": 0.955,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.995
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00361,
+        0.0307
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.995,
+       "impostor_additional_rate": 0.055,
+       "impostor_rejected_rate": 0.945,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.996
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.919,
+       "genuine_additional_rate": 0.076,
+       "impostor_additional_rate": 0.045,
+       "impostor_rejected_rate": 0.955,
+       "bypass": {
+        "face": {
+         "asr": 0.891,
+         "stopped_by_extra_verification": 0.101
+        }
+       },
+       "worst_bypass_asr": 0.891,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.005,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.995,
+       "impostor_additional_rate": 0.045,
+       "impostor_rejected_rate": 0.955,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.992
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00062,
+        0.01974
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.049,
+       "impostor_rejected_rate": 0.951,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.996
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.0,
+        0.01339
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.007,
+       "genuine_approved": 0.897,
+       "genuine_additional_rate": 0.096,
+       "impostor_additional_rate": 0.053,
+       "impostor_rejected_rate": 0.947,
+       "bypass": {
+        "face": {
+         "asr": 0.887,
+         "stopped_by_extra_verification": 0.103
+        }
+       },
+       "worst_bypass_asr": 0.887,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00194,
+        0.0254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.007,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.993,
+       "impostor_additional_rate": 0.053,
+       "impostor_rejected_rate": 0.947,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.99
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.00194,
+        0.0254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.001,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.999,
+       "impostor_additional_rate": 0.059,
+       "impostor_rejected_rate": 0.941,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.995
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.01339
+       ],
+       "frr_ci": [
+        0.0,
+        0.01339
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "only fingerprint",
+    "modalities": [
+     "fingerprint"
+    ],
+    "pool_size_min": 150,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 1.0,
+      "genuine_additional_rate": 0.0,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 1.0
+      },
+      "worst_bypass_asr": 1.0,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.0,
+       0.02497
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 0.0,
+      "genuine_additional_rate": 1.0,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 0.0
+      },
+      "worst_bypass_asr": 0.0,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.0,
+       0.02497
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 1.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0,
+      "genuine_approved": 0.4,
+      "genuine_additional_rate": 0.6,
+      "impostor_additional_rate": 0.0,
+      "bypass_asr": {
+       "fingerprint": 0.4
+      },
+      "worst_bypass_asr": 0.4,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.02497
+      ],
+      "frr_ci": [
+       0.0,
+       0.02497
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.6,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.4,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 1.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 1.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 1.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 1.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 1.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 1.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 1.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 1.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 1.0,
+       "genuine_additional_rate": 0.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 1.0,
+         "stopped_by_extra_verification": 0.0
+        }
+       },
+       "worst_bypass_asr": 1.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 1.0,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 1.0
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.02497
+       ],
+       "frr_ci": [
+        0.0,
+        0.02497
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "only voice",
+    "modalities": [
+     "voice"
+    ],
+    "pool_size_min": 53,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.0991,
+      "genuine_approved": 0.8868,
+      "genuine_additional_rate": 0.0141,
+      "impostor_additional_rate": 0.0226,
+      "bypass_asr": {
+       "voice": 0.8851
+      },
+      "worst_bypass_asr": 0.8851,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.04097,
+       0.20254
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.09464,
+        "sd": 0.00524,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.01418,
+        "sd": 0.00052,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.88734,
+        "sd": 0.00664,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.0991,
+      "genuine_approved": 0.0,
+      "genuine_additional_rate": 0.9009,
+      "impostor_additional_rate": 0.0226,
+      "bypass_asr": {
+       "voice": 0.0
+      },
+      "worst_bypass_asr": 0.0,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.04097,
+       0.20254
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.09464,
+        "sd": 0.00524,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.90536,
+        "sd": 0.00524,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0113,
+      "genuine_approved": 0.3752,
+      "genuine_additional_rate": 0.6135,
+      "impostor_additional_rate": 0.0226,
+      "bypass_asr": {
+       "voice": 0.3732
+      },
+      "worst_bypass_asr": 0.3732,
+      "omission_asr": {},
+      "worst_omission_asr": null,
+      "far_ci": [
+       0.0,
+       0.06758
+      ],
+      "frr_ci": [
+       0.00334,
+       0.09943
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.01122,
+        "sd": 0.00208,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.61254,
+        "sd": 0.00355,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.37232,
+        "sd": 0.00223,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": null,
+        "sd": null,
+        "n": 0
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.104,
+       "genuine_approved": 0.881,
+       "genuine_additional_rate": 0.015,
+       "impostor_additional_rate": 0.026,
+       "impostor_rejected_rate": 0.974,
+       "bypass": {
+        "voice": {
+         "asr": 0.873,
+         "stopped_by_extra_verification": 0.014
+        }
+       },
+       "worst_bypass_asr": 0.873,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.05293,
+        0.22577
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.104,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.896,
+       "impostor_additional_rate": 0.026,
+       "impostor_rejected_rate": 0.974,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.887
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.05293,
+        0.22577
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.0,
+       "genuine_approved": 0.938,
+       "genuine_additional_rate": 0.062,
+       "impostor_additional_rate": 0.026,
+       "impostor_rejected_rate": 0.974,
+       "bypass": {
+        "voice": {
+         "asr": 0.933,
+         "stopped_by_extra_verification": 0.067
+        }
+       },
+       "worst_bypass_asr": 0.933,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.0,
+        0.06758
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.09,
+       "genuine_approved": 0.897,
+       "genuine_additional_rate": 0.013,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.897,
+         "stopped_by_extra_verification": 0.014
+        }
+       },
+       "worst_bypass_asr": 0.897,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.04097,
+        0.20254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.09,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.91,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.911
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.04097,
+        0.20254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.015,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.985,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.985
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.095,
+       "genuine_approved": 0.894,
+       "genuine_additional_rate": 0.011,
+       "impostor_additional_rate": 0.027,
+       "impostor_rejected_rate": 0.973,
+       "bypass": {
+        "voice": {
+         "asr": 0.89,
+         "stopped_by_extra_verification": 0.02
+        }
+       },
+       "worst_bypass_asr": 0.89,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.04097,
+        0.20254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.095,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.905,
+       "impostor_additional_rate": 0.027,
+       "impostor_rejected_rate": 0.973,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.91
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.04097,
+        0.20254
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.017,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.983,
+       "impostor_additional_rate": 0.027,
+       "impostor_rejected_rate": 0.973,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.981
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.00334,
+        0.09943
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.115,
+       "genuine_approved": 0.865,
+       "genuine_additional_rate": 0.02,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.888,
+         "stopped_by_extra_verification": 0.015
+        }
+       },
+       "worst_bypass_asr": 0.888,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.05293,
+        0.22577
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.115,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.885,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.903
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.05293,
+        0.22577
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.034,
+       "genuine_approved": 0.0,
+       "genuine_additional_rate": 0.966,
+       "impostor_additional_rate": 0.017,
+       "impostor_rejected_rate": 0.983,
+       "bypass": {
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.967
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {},
+       "worst_omission_asr": null,
+       "far_ci": [
+        0.0,
+        0.06758
+       ],
+       "frr_ci": [
+        0.01041,
+        0.12755
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    }
+   },
+   {
+    "name": "all modalities degraded",
+    "modalities": [
+     "face",
+     "fingerprint",
+     "voice"
+    ],
+    "pool_size_min": 28,
+    "overall": {
+     "fixed": {
+      "far": 0.0,
+      "frr": 0.1967,
+      "genuine_approved": 0.8012,
+      "genuine_additional_rate": 0.0021,
+      "impostor_additional_rate": 0.0007,
+      "bypass_asr": {
+       "face": 0.0034,
+       "fingerprint": 0.0041,
+       "voice": 0.0232
+      },
+      "worst_bypass_asr": 0.0232,
+      "omission_asr": {
+       "face": 0.6696,
+       "fingerprint": 0.5234,
+       "voice": 0.7334
+      },
+      "worst_omission_asr": 0.7334,
+      "far_ci": [
+       0.0,
+       0.12065
+      ],
+      "frr_ci": [
+       0.10212,
+       0.39539
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.1945,
+        "sd": 0.00901,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.00222,
+        "sd": 0.00036,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.02244,
+        "sd": 0.00378,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.7228,
+        "sd": 0.00698,
+        "n": 5
+       }
+      }
+     },
+     "fixed_min2": {
+      "far": 0.0,
+      "frr": 0.1967,
+      "genuine_approved": 0.7626,
+      "genuine_additional_rate": 0.0407,
+      "impostor_additional_rate": 0.0007,
+      "bypass_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0003,
+       "voice": 0.0002
+      },
+      "worst_bypass_asr": 0.0003,
+      "omission_asr": {
+       "face": 0.0,
+       "fingerprint": 0.0,
+       "voice": 0.0
+      },
+      "worst_omission_asr": 0.0,
+      "far_ci": [
+       0.0,
+       0.12065
+      ],
+      "frr_ci": [
+       0.10212,
+       0.39539
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.1945,
+        "sd": 0.00901,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.03784,
+        "sd": 0.00254,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.00024,
+        "sd": 0.00011,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       }
+      }
+     },
+     "risk_aware": {
+      "far": 0.0,
+      "frr": 0.0146,
+      "genuine_approved": 0.5993,
+      "genuine_additional_rate": 0.3861,
+      "impostor_additional_rate": 0.0011,
+      "bypass_asr": {
+       "face": 0.0016,
+       "fingerprint": 0.0023,
+       "voice": 0.0094
+      },
+      "worst_bypass_asr": 0.0094,
+      "omission_asr": {
+       "face": 0.2748,
+       "fingerprint": 0.2596,
+       "voice": 0.3188
+      },
+      "worst_omission_asr": 0.3188,
+      "far_ci": [
+       0.0,
+       0.12065
+      ],
+      "frr_ci": [
+       0.0,
+       0.12065
+      ],
+      "across_repeats": {
+       "far": {
+        "mean": 0.0,
+        "sd": 0.0,
+        "n": 5
+       },
+       "frr": {
+        "mean": 0.01472,
+        "sd": 0.00138,
+        "n": 5
+       },
+       "genuine_additional_rate": {
+        "mean": 0.39112,
+        "sd": 0.01272,
+        "n": 5
+       },
+       "worst_bypass_asr": {
+        "mean": 0.01104,
+        "sd": 0.00239,
+        "n": 5
+       },
+       "worst_omission_asr": {
+        "mean": 0.31296,
+        "sd": 0.00389,
+        "n": 5
+       }
+      }
+     }
+    },
+    "by_risk": {
+     "low": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.181,
+       "genuine_approved": 0.818,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.004,
+         "stopped_by_extra_verification": 0.001
+        },
+        "fingerprint": {
+         "asr": 0.003,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.023,
+         "stopped_by_extra_verification": 0.004
+        }
+       },
+       "worst_bypass_asr": 0.023,
+       "omission": {
+        "face": {
+         "asr": 0.687
+        },
+        "fingerprint": {
+         "asr": 0.51
+        },
+        "voice": {
+         "asr": 0.733
+        }
+       },
+       "worst_omission_asr": 0.733,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.07878,
+        0.35592
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.181,
+       "genuine_approved": 0.776,
+       "genuine_additional_rate": 0.043,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.005
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.003
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.027
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.07878,
+        0.35592
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.006,
+       "genuine_approved": 0.742,
+       "genuine_additional_rate": 0.252,
+       "impostor_additional_rate": 0.002,
+       "impostor_rejected_rate": 0.998,
+       "bypass": {
+        "face": {
+         "asr": 0.004,
+         "stopped_by_extra_verification": 0.51
+        },
+        "fingerprint": {
+         "asr": 0.005,
+         "stopped_by_extra_verification": 0.5
+        },
+        "voice": {
+         "asr": 0.023,
+         "stopped_by_extra_verification": 0.708
+        }
+       },
+       "worst_bypass_asr": 0.023,
+       "omission": {
+        "face": {
+         "asr": 0.687
+        },
+        "fingerprint": {
+         "asr": 0.649
+        },
+        "voice": {
+         "asr": 0.797
+        }
+       },
+       "worst_omission_asr": 0.797,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.0,
+        0.12065
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "medium": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.196,
+       "genuine_approved": 0.8,
+       "genuine_additional_rate": 0.004,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.004,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.005,
+         "stopped_by_extra_verification": 0.003
+        },
+        "voice": {
+         "asr": 0.025,
+         "stopped_by_extra_verification": 0.002
+        }
+       },
+       "worst_bypass_asr": 0.025,
+       "omission": {
+        "face": {
+         "asr": 0.645
+        },
+        "fingerprint": {
+         "asr": 0.542
+        },
+        "voice": {
+         "asr": 0.741
+        }
+       },
+       "worst_omission_asr": 0.741,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.07878,
+        0.35592
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.196,
+       "genuine_approved": 0.758,
+       "genuine_additional_rate": 0.046,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.004
+        },
+        "fingerprint": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.007
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.027
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.07878,
+        0.35592
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.013,
+       "genuine_approved": 0.656,
+       "genuine_additional_rate": 0.331,
+       "impostor_additional_rate": 0.0,
+       "impostor_rejected_rate": 1.0,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.086
+        },
+        "fingerprint": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.32
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.397
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.0,
+        0.12065
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "high": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.228,
+       "genuine_approved": 0.77,
+       "genuine_additional_rate": 0.002,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.003,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.005,
+         "stopped_by_extra_verification": 0.002
+        },
+        "voice": {
+         "asr": 0.022,
+         "stopped_by_extra_verification": 0.004
+        }
+       },
+       "worst_bypass_asr": 0.022,
+       "omission": {
+        "face": {
+         "asr": 0.67
+        },
+        "fingerprint": {
+         "asr": 0.536
+        },
+        "voice": {
+         "asr": 0.733
+        }
+       },
+       "worst_omission_asr": 0.733,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.10212,
+        0.39539
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.228,
+       "genuine_approved": 0.747,
+       "genuine_additional_rate": 0.025,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.003
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.007
+        },
+        "voice": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.025
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.10212,
+        0.39539
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.023,
+       "genuine_approved": 0.415,
+       "genuine_additional_rate": 0.562,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.072
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.168
+        },
+        "voice": {
+         "asr": 0.001,
+         "stopped_by_extra_verification": 0.324
+        }
+       },
+       "worst_bypass_asr": 0.001,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.00633,
+        0.17713
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     },
+     "critical": {
+      "fixed": {
+       "far": 0.0,
+       "frr": 0.199,
+       "genuine_approved": 0.8,
+       "genuine_additional_rate": 0.001,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.004,
+         "stopped_by_extra_verification": 0.0
+        },
+        "voice": {
+         "asr": 0.021,
+         "stopped_by_extra_verification": 0.004
+        }
+       },
+       "worst_bypass_asr": 0.021,
+       "omission": {
+        "face": {
+         "asr": 0.673
+        },
+        "fingerprint": {
+         "asr": 0.496
+        },
+        "voice": {
+         "asr": 0.713
+        }
+       },
+       "worst_omission_asr": 0.713,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.10212,
+        0.39539
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "fixed_min2": {
+       "far": 0.0,
+       "frr": 0.199,
+       "genuine_approved": 0.754,
+       "genuine_additional_rate": 0.047,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.004
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.025
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.10212,
+        0.39539
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      },
+      "risk_aware": {
+       "far": 0.0,
+       "frr": 0.037,
+       "genuine_approved": 0.227,
+       "genuine_additional_rate": 0.736,
+       "impostor_additional_rate": 0.001,
+       "impostor_rejected_rate": 0.999,
+       "bypass": {
+        "face": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.054
+        },
+        "fingerprint": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.121
+        },
+        "voice": {
+         "asr": 0.0,
+         "stopped_by_extra_verification": 0.238
+        }
+       },
+       "worst_bypass_asr": 0.0,
+       "omission": {
+        "face": {
+         "asr": 0.0
+        },
+        "fingerprint": {
+         "asr": 0.0
+        },
+        "voice": {
+         "asr": 0.0
+        }
+       },
+       "worst_omission_asr": 0,
+       "far_ci": [
+        0.0,
+        0.12065
+       ],
+       "frr_ci": [
+        0.00633,
+        0.17713
+       ],
+       "genuine_n": 1000,
+       "impostor_n": 1000
+      }
+     }
+    },
+    "fixed_sweep": [
+     {
+      "threshold": 0.5,
+      "genuine_not_approved": 0.046,
+      "far": 0.0,
+      "worst_bypass_asr": 0.105,
+      "worst_omission_asr": 0.799
+     },
+     {
+      "threshold": 0.6,
+      "genuine_not_approved": 0.097,
+      "far": 0.0,
+      "worst_bypass_asr": 0.027,
+      "worst_omission_asr": 0.799
+     },
+     {
+      "threshold": 0.7,
+      "genuine_not_approved": 0.2,
+      "far": 0.0,
+      "worst_bypass_asr": 0.025,
+      "worst_omission_asr": 0.741
+     },
+     {
+      "threshold": 0.8,
+      "genuine_not_approved": 0.386,
+      "far": 0.0,
+      "worst_bypass_asr": 0.025,
+      "worst_omission_asr": 0.741
+     },
+     {
+      "threshold": 0.9,
+      "genuine_not_approved": 0.683,
+      "far": 0.0,
+      "worst_bypass_asr": 0.017,
+      "worst_omission_asr": 0.638
+     },
+     {
+      "threshold": 0.95,
+      "genuine_not_approved": 0.849,
+      "far": 0.0,
+      "worst_bypass_asr": 0.014,
+      "worst_omission_asr": 0.608
+     },
+     {
+      "threshold": 0.99,
+      "genuine_not_approved": 0.991,
+      "far": 0.0,
+      "worst_bypass_asr": 0.003,
+      "worst_omission_asr": 0.42
+     }
+    ]
+   }
+  ],
+  "fusion_config": {
+   "fixed_threshold": 0.7,
+   "weights": {
+    "face": 1.0,
+    "fingerprint": 1.0,
+    "voice": 1.0
+   },
+   "bands": {
+    "low": {
+     "approve": 0.6,
+     "reject": 0.3,
+     "min_modalities": 1,
+     "min_coverage": 0.3,
+     "conflict_floor": 0.5,
+     "require_core": false
+    },
+    "medium": {
+     "approve": 0.7,
+     "reject": 0.35,
+     "min_modalities": 2,
+     "min_coverage": 0.5,
+     "conflict_floor": 0.5,
+     "require_core": false
+    },
+    "high": {
+     "approve": 0.8,
+     "reject": 0.4,
+     "min_modalities": 2,
+     "min_coverage": 0.6,
+     "conflict_floor": 0.5,
+     "require_core": true
+    },
+    "critical": {
+     "approve": 0.88,
+     "reject": 0.45,
+     "min_modalities": 2,
+     "min_coverage": 0.7,
+     "conflict_floor": 0.5,
+     "require_core": true
+    }
+   }
+  },
+  "reproducibility": {
+   "command": "/home/uravity/trilock/backend/app/evaluation/run_fusion.py",
+   "seed": 7,
+   "versions": {
+    "python": "3.12.7",
+    "numpy": "2.2.6",
+    "cv2": "5.0.0",
+    "torch": "2.14.1+cpu",
+    "speechbrain": "1.1.2",
+    "scipy": "1.18.1"
+   },
+   "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39"
+  }
+ },
+ "fusion_run_id": 8,
+ "liveness": {
+  "reproducibility": {
+   "command": "/home/uravity/trilock/backend/app/evaluation/run_liveness.py --lfw data/datasets/lfw/lfw_funneled --speech data/datasets/librispeech/LibriSpeech/dev-clean-2 --people 250 --per-speaker 6",
+   "seed": 1,
+   "versions": {
+    "python": "3.12.7",
+    "numpy": "2.2.6",
+    "cv2": "5.0.0",
+    "torch": "2.14.1+cpu",
+    "speechbrain": "1.1.2",
+    "scipy": "1.18.1"
+   },
+   "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39"
+  },
+  "face": {
+   "people": 250,
+   "thresholds": {
+    "yaw_min": 0.25,
+    "parallax_min": 0.15,
+    "max_step_fraction": 0.7
+   },
+   "flat_photo_tilt_attack_passes": {
+    "k": 1,
+    "n": 1000,
+    "rate": 0.001,
+    "ci95": [
+     0.00018,
+     0.00564
+    ]
+   },
+   "flat_photo_result_codes": {
+    "no_head_turn": 985,
+    "wrong_direction": 2,
+    "face_lost": 12,
+    "passed": 1
+   },
+   "photo_swap_attack_passes": {
+    "k": 0,
+    "n": 192,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.01962
+    ]
+   },
+   "photo_swap_result_codes": {
+    "abrupt_change": 192
+   },
+   "real_turn_proxy_parallax_pass": {
+    "k": 192,
+    "n": 192,
+    "rate": 1.0,
+    "ci95": [
+     0.98038,
+     1.0
+    ]
+   },
+   "note": "attacks are geometric simulations on stills; turn proxy uses different photos of one person"
+  },
+  "voice": {
+   "utterances": 130,
+   "speakers": 26,
+   "said_words_pass_3of3": {
+    "clean": {
+     "k": 102,
+     "n": 130,
+     "rate": 0.78462,
+     "ci95": [
+      0.70632,
+      0.84657
+     ]
+    },
+    "n10": {
+     "k": 70,
+     "n": 130,
+     "rate": 0.53846,
+     "ci95": [
+      0.45289,
+      0.62182
+     ]
+    },
+    "n0": {
+     "k": 17,
+     "n": 130,
+     "rate": 0.13077,
+     "ci95": [
+      0.08327,
+      0.19946
+     ]
+    }
+   },
+   "unrelated_audio_pass_3of3": {
+    "k": 0,
+    "n": 650,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.00588
+    ]
+   },
+   "said_words_pass_2of3": {
+    "clean": {
+     "k": 124,
+     "n": 130,
+     "rate": 0.95385,
+     "ci95": [
+      0.90296,
+      0.97868
+     ]
+    },
+    "n10": {
+     "k": 118,
+     "n": 130,
+     "rate": 0.90769,
+     "ci95": [
+      0.84557,
+      0.94641
+     ]
+    },
+    "n0": {
+     "k": 63,
+     "n": 130,
+     "rate": 0.48462,
+     "ci95": [
+      0.40039,
+      0.56973
+     ]
+    }
+   },
+   "unrelated_audio_pass_2of3": {
+    "k": 0,
+    "n": 650,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.00588
+    ]
+   },
+   "project_vocabulary_chance_pass_3of3": {
+    "k": 0,
+    "n": 3000,
+    "rate": 0.0,
+    "ci95": [
+     0.0,
+     0.00128
+    ]
+   },
+   "note": "content check only; challenge words come from the utterance transcript; no voice cloning tested"
+  }
+ }
+}

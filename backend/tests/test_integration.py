@@ -67,3 +67,41 @@ def test_voice_same_speaker_vs_other(voice):
     assert gen.status == VerificationStatus.MATCH, gen
     assert imp.status == VerificationStatus.NO_MATCH, imp
     assert gen.raw_score > imp.raw_score + 0.2
+
+
+# ---- liveness with the real detector and the real speech recognizer ----
+@pytest.fixture(scope="module")
+def spoken():
+    from app.biometrics.voice_liveness import SpokenChallenge
+    sc = SpokenChallenge(settings.models_dir)
+    ok, detail = sc.status()
+    if not ok:
+        pytest.skip(f"speech recognizer unavailable: {detail}")
+    return sc
+
+
+def test_spoken_challenge_hears_words_that_were_said_and_rejects_other_audio(spoken):
+    # voice_a1 transcript: "because you were sleeping instead of conquering the lovely rose princess ..."
+    said = spoken.check((FIX / "voice_a1.flac").read_bytes(), ["sleeping", "conquering", "princess"])
+    assert said.ok, said.details
+    other = spoken.check((FIX / "voice_b1.flac").read_bytes(), ["sleeping", "conquering", "princess"])
+    assert not other.ok and other.code == "phrase_not_heard"
+    assert not spoken.check((FIX / "voice_a1.flac").read_bytes(), ["river", "window", "orange"]).ok
+
+
+def test_spoken_challenge_rejects_garbage_audio(spoken):
+    assert spoken.check(b"not audio", ["river", "window", "orange"]).code == "unsupported_audio"
+
+
+def test_head_turn_challenge_rejects_a_static_photo_and_a_tilted_flat_photo(face):
+    import cv2
+    from app.biometrics.liveness import FaceLiveness
+    from app.evaluation.run_liveness import jpeg, tilt_warp
+    live = FaceLiveness(face)
+    img = cv2.imread(str(FIX / "face_a1.jpg"))
+    static = live.check([jpeg(img)] * 10, "left")
+    assert not static.ok and static.code == "no_head_turn"
+    for direction in ("left", "right"):
+        tilted = live.check([jpeg(tilt_warp(img, 40 * k / 9)) for k in range(10)], direction)
+        assert not tilted.ok, tilted
+    assert live.check([jpeg(img)] * 3, "left").code == "frame_count"

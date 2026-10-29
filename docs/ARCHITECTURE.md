@@ -2,7 +2,7 @@
 
 TriLock is two programs that talk over HTTP: a FastAPI backend that owns all the logic and data, and a React frontend that only collects input and displays what the backend returns. The frontend never computes a score, a risk level or a decision.
 
-Every request except health, register and login carries a bearer token. `security.current_user` resolves it to a user (or answers 401); routes then check ownership (`owner_only`, `owner_or_admin`) before touching data. See [SECURITY.md](SECURITY.md).
+Every request except health, register and the password step of login carries a bearer token. `security.current_user` resolves it to a user (or answers 401); routes then check ownership (`owner_only`, `owner_or_admin`) before touching data. See [SECURITY.md](SECURITY.md).
 
 ```
 Browser (React, Vite dev server :5173)
@@ -11,13 +11,17 @@ Browser (React, Vite dev server :5173)
 FastAPI app (backend/app)
    api/routes_*.py        HTTP layer: parse, validate, authorise, call services, shape responses
    security.py            password hashing, sessions, current_user / admin dependencies
+   biometrics/liveness.py        head-turn check from landmarks (parallax, smoothness, identity)
+   biometrics/voice_liveness.py  spoken random words, checked with faster-whisper tiny.en
    services/              business logic, no HTTP types
        risk.py            rule-based transaction risk
        fusion.py          fixed-threshold and risk-aware decision policies
        authentication.py  create transaction, run modules, fuse, persist the attempt
        enrollment.py      build and store references, report enrollment status
        templates.py       encrypted template files
-       privacy.py         account erasure and retention purge
+       privacy.py         account erasure, retention purge, recovery reset
+       abuse.py           source-scoped lockouts (device and network), new-device limit
+       challenges.py      one-time liveness challenges (in memory)
        stats.py           dashboard queries
        demo_scenarios.py  hand-written scenarios for the policy demo table
    biometrics/            one class per modality behind the same interface
@@ -34,7 +38,8 @@ SQLite file + encrypted templates in backend/data
 
 `POST /api/transactions/{id}/authenticate` takes up to three optional files (`face`, `fingerprint`, `voice`) and does this in `services/authentication.py`:
 
-0. Refuse if the transaction is closed, the attempt limit is reached or the user has too many recent failed biometric attempts (429).
+0. Refuse if the transaction is closed, the attempt limit is reached, or this device or network has too many recent failed biometric or liveness attempts (429).
+   At or above the configured risk level a still photo or free recording is not accepted for face and voice; the live challenge is checked first, and a failed check vetoes approval on that attempt.
 1. For every modality, run the module. A missing file, a missing enrollment, a bad input or an exception inside a model all become a `NOT_EVALUATED` result with a reason code. There is no code path that turns a failure into a match.
 2. Run both policies on the same list of results and the transaction's risk category.
 3. Pick the active policy (`TRILOCK_ACTIVE_POLICY`, default `risk_aware`), store an `AuthAttempt` with the module results and both outcomes, and close the transaction with a guarded update (it only succeeds if the transaction is still open, so concurrent requests cannot both decide it).
@@ -47,7 +52,9 @@ Approved and rejected transactions are closed; a further authenticate call retur
 | Table | Purpose |
 |---|---|
 | users | accounts: name, email, generated account number, scrypt password hash, role, failed-login counter and lock time |
-| sessions | SHA-256 of each bearer token, expiry, revoked flag |
+| sessions | SHA-256 of each bearer token, expiry, revoked flag, scope (`full`, `limited`, `preauth`) and biometric tries made |
+| devices | hash of a random browser id per user, used to scope lockouts |
+| recovery_requests | biometric recovery requests: status, reason, earliest approval time, decision |
 | enrollments | one row per user and modality: method, sample count, mean quality, template file name |
 | transactions | request attributes, risk score/category/factors, current decision and reason |
 | auth_attempts | per attempt: every module result, both policy outcomes, active policy, final decision, explanation, latency |
@@ -65,15 +72,19 @@ Every biometric module implements `enroll(samples) -> (template, quality, n)` an
 | Endpoint | Who | Purpose |
 |---|---|---|
 | GET /api/health | public | status and database check only |
-| POST /api/auth/register, /login | public | create account (if enabled), sign in |
+| POST /api/auth/register, /login | public | create account (if enabled); password step of sign-in. Returns `ok`, `enrollment_required` (limited session) or `biometric_required` (pre-auth token plus a challenge) |
+| POST /api/auth/login/challenge, /login/biometric | pre-auth token | a fresh challenge; the live face and voice step that issues the full session |
 | POST /api/auth/logout, GET /api/auth/me | signed in | end session, current user with enrollment status |
 | GET /api/users | admin | all accounts |
 | GET /api/users/{id}, /enrollments | owner or admin | account and enrollment status |
-| POST/DELETE /api/users/{id}/enrollments/{modality} | owner, password required | enroll (multipart `files`, `password`) or remove |
-| DELETE /api/users/{id} | owner, password required | erase account and data |
+| POST/DELETE /api/users/{id}/enrollments/{modality} | owner, password + biometric proof | enroll (multipart `files`, `password`, `proof_face` / `proof_voice` / `proof_fingerprint`) or remove. Proof is required once any biometric is enrolled |
+| DELETE /api/users/{id} | owner, password + biometric proof | erase account and data |
+| POST /api/recovery, GET /api/recovery/mine, POST /api/recovery/{id}/cancel | owner | file, see and cancel a biometric recovery request |
+| GET /api/recovery, POST /api/recovery/{id}/approve, /deny | admin | recovery queue; approval only after the cooling-off period |
+| POST /api/liveness/challenge | owner | one-time challenge: head-turn direction and three words |
 | POST /api/risk/assess | signed in | stateless risk preview |
 | POST /api/transactions, GET list, GET one | owner (admin read-only) | transactions; list takes q, decision, risk_category, limit, offset |
-| POST /api/transactions/{id}/authenticate | owner | multimodal authentication |
+| POST /api/transactions/{id}/authenticate | owner | multimodal authentication; optional `challenge_id` and `face_frames` for the live check |
 | POST /api/verify/{modality} | owner | run one module alone (counts toward lockout) |
 | GET /api/dashboard/stats | signed in | own numbers, or everyone's for admin |
 | GET /api/policy | signed in | risk rules and fusion thresholds in force |

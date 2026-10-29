@@ -12,11 +12,13 @@ A. Fixed-threshold fusion (baseline)
 B. Risk-aware fusion (proposed)
    1. Each usable modality gets a reliability weight  w_i * (0.4 + 0.6 * quality_i).
    2. fused = reliability-weighted mean of calibrated scores.
-   3. coverage = sum of reliability weights of usable modalities / sum of base weights. This
+   3. coverage = sum of reliability weights of usable modalities / sum of the CORE modalities' base weights
+      (face and voice; optional modalities such as fingerprint only add, they never count against us), capped at 1. This
       measures how much of the full three-modality evidence we actually have.
    4. The transaction's risk category selects a policy band with its own approve threshold,
       reject threshold, minimum number of usable modalities, minimum coverage and a
-      "conflict floor" (no usable modality may score below it for an approval).
+      "conflict floor" (no usable modality may score below it for an approval). The default floor is 0.5, so a
+      modality that says "no match" can never be outvoted by the others.
    5. Decision:
         - fused < reject_threshold                       -> REJECTED   (clear mismatch)
         - fused >= approve_threshold AND enough evidence
@@ -50,17 +52,23 @@ class Band:
     min_modalities: int
     min_coverage: float
     conflict_floor: float
+    require_core: bool = False      # the core modalities (face and voice) must both be usable for an approval
 
 
 @dataclass
 class FusionConfig:
+    # Face and voice are the core. Anything else (fingerprint) is OPTIONAL: when present and usable it adds
+    # evidence, when absent it never lowers coverage or asks the user for more.
+    core_modalities: list[str] = field(default_factory=lambda: ["face", "voice"])
     weights: dict[str, float] = field(default_factory=lambda: {"face": 1.0, "fingerprint": 1.0, "voice": 1.0})
     fixed_threshold: float = 0.70
     bands: dict[str, Band] = field(default_factory=lambda: {
-        "low":      Band(approve=0.60, reject=0.30, min_modalities=1, min_coverage=0.30, conflict_floor=0.00),
-        "medium":   Band(approve=0.70, reject=0.35, min_modalities=2, min_coverage=0.50, conflict_floor=0.15),
-        "high":     Band(approve=0.80, reject=0.40, min_modalities=2, min_coverage=0.60, conflict_floor=0.25),
-        "critical": Band(approve=0.88, reject=0.45, min_modalities=3, min_coverage=0.70, conflict_floor=0.35),
+        # conflict_floor 0.5 in every band: each evaluated modality must itself match (calibrated probability >= 0.5),
+        # so a clear "no match" from one modality can never be outvoted by a strong score from another.
+        "low":      Band(approve=0.60, reject=0.30, min_modalities=1, min_coverage=0.30, conflict_floor=0.50),
+        "medium":   Band(approve=0.70, reject=0.35, min_modalities=2, min_coverage=0.50, conflict_floor=0.50),
+        "high":     Band(approve=0.80, reject=0.40, min_modalities=2, min_coverage=0.60, conflict_floor=0.50, require_core=True),
+        "critical": Band(approve=0.88, reject=0.45, min_modalities=2, min_coverage=0.70, conflict_floor=0.50, require_core=True),
     })
 
 
@@ -82,6 +90,10 @@ class FusionOutcome:
         d = asdict(self)
         d["decision"] = self.decision.value
         return d
+
+
+def core_weight(cfg: FusionConfig) -> float:
+    return sum(cfg.weights[m] for m in cfg.core_modalities) or 1.0
 
 
 def _split(results: list[ModalityResult]):
@@ -108,7 +120,7 @@ def fixed_threshold_fusion(results: list[ModalityResult], risk_category: RiskCat
                                          "Another verification step is needed.", **common)
     wsum = sum(cfg.weights[r.modality] for r in usable)
     fused = sum(cfg.weights[r.modality] * r.calibrated for r in usable) / wsum
-    cov = wsum / sum(cfg.weights.values())
+    cov = min(1.0, wsum / core_weight(cfg))
     names = [r.modality for r in usable]
     if fused >= cfg.fixed_threshold:
         dec, text = Decision.APPROVED, (f"Fused score {fused:.2f} from {_fmt(names)} reached the fixed threshold "
@@ -144,10 +156,14 @@ def risk_aware_fusion(results: list[ModalityResult], risk_category: RiskCategory
     rel = {r.modality: reliability(r, cfg.weights[r.modality]) for r in usable}
     rsum = sum(rel.values())
     fused = sum(rel[r.modality] * r.calibrated for r in usable) / rsum
-    cov = rsum / sum(cfg.weights.values())
+    cov = min(1.0, rsum / core_weight(cfg))
     names = [r.modality for r in usable]
 
     unmet: list[str] = []
+    if band.require_core:
+        missing_core = [m for m in cfg.core_modalities if m not in names]
+        if missing_core:
+            unmet.append(f"{cat}-risk transactions need {' and '.join(cfg.core_modalities)} (missing: {', '.join(missing_core)})")
     if len(usable) < band.min_modalities:
         unmet.append(f"{cat}-risk transactions need at least {band.min_modalities} evaluated modalities "
                      f"(got {len(usable)})")
@@ -155,7 +171,7 @@ def risk_aware_fusion(results: list[ModalityResult], risk_category: RiskCategory
         unmet.append(f"evidence coverage {cov:.2f} is below the required {band.min_coverage:.2f}")
     weak = [r.modality for r in usable if r.calibrated < band.conflict_floor]
     if weak:
-        unmet.append(f"{_fmt(weak)} scored below the conflict floor {band.conflict_floor:.2f}")
+        unmet.append(f"{_fmt(weak)} did not match (each evaluated modality must reach {band.conflict_floor:.2f})")
 
     fused_r = round(fused, 4)
     if fused < band.reject:
